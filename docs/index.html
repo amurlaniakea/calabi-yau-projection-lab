@@ -1,9 +1,10 @@
+
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Calabi-Yau Projection Lab</title>
+<title>Calabi–Yau Projection Lab — Local Demo</title>
 <style>
 :root { color-scheme: dark; }
 body { margin:0; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background:#0b0e14; color:#d8e1ea; }
@@ -18,32 +19,18 @@ input[type=range], select, button { width:100%; box-sizing:border-box; }
 button { padding:8px; background:#152033; color:#d8e1ea; border:1px solid #263b5f; border-radius:6px; cursor:pointer; }
 button:hover { background:#1d2d49; }
 pre { white-space:pre-wrap; background:#07090d; border:1px solid #1e2633; padding:10px; border-radius:6px; font-size:12px; min-height:140px; }
-.legend { height:14px; border-radius:3px; margin:4px 0; }
-.legend-labels { display:flex; justify-content:space-between; font-size:11px; color:#9fb0c0; }
 .notice { font-size:12px; color:#8a98a8; border-top:1px solid #1e2633; padding-top:10px; }
-footer { padding:12px 20px; border-top:1px solid #1e2633; font-size:12px; color:#8a98a8; }
-footer a { color:#7fd1ff; text-decoration:none; }
-footer a:hover { text-decoration:underline; }
 @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 <header>
-<h1>Calabi-Yau Projection Lab</h1>
-<p>Zero-dependency local demo. Educational projection of higher-dimensional objects. Not a full 6D threefold or physics simulation.</p>
+<h1>Calabi–Yau Projection Lab</h1>
+<p>Zero-dependency local demo. Educational projection of a Calabi–Yau-like Fermat patch, not a full 6D threefold or physics simulation.</p>
 </header>
 <main>
 <canvas id="view" width="960" height="720"></canvas>
 <aside>
-<label>Object
-<select id="objType">
-<option value="cy-patch">Calabi-Yau-like Fermat patch (R^4)</option>
-<option value="clifford-torus">Clifford torus (R^4)</option>
-<option value="hypercube">Hypercube (R^6)</option>
-<option value="sphere">Unit n-sphere (R^4)</option>
-<option value="domain">Random domain (R^11)</option>
-</select>
-</label>
 <label>Degree <input id="degree" type="range" min="3" max="8" step="1" value="5"><span id="degreeVal">5</span></label>
 <label>Resolution <input id="resolution" type="range" min="4" max="28" step="1" value="16"><span id="resolutionVal">16</span></label>
 <label>Speed <input id="speed" type="range" min="0" max="30" step="1" value="8"><span id="speedVal">8</span></label>
@@ -58,21 +45,15 @@ footer a:hover { text-decoration:underline; }
 <button id="regen">Regenerate</button>
 <button id="pause">Pause / Play</button>
 <button id="png">Export PNG</button>
-<div class="legend" id="legend"></div>
-<div class="legend-labels"><span id="legendMin">min</span><span id="legendMax">max</span></div>
 <pre id="info"></pre>
-<div class="notice">Tecnosfera al servicio de la Biosfera. La Paz Es El Camino.</div>
+<div class="notice">«Tecnósfera al servicio de la Biósfera.» — «La Paz Es El Camino.»</div>
 </aside>
 </main>
-<footer>
-Source: <a href="https://github.com/amurlaniakea/calabi-yau-projection-lab">github.com/amurlaniakea/calabi-yau-projection-lab</a>
-</footer>
 <script>
 const $ = (id) => document.getElementById(id);
 const canvas = $('view');
 const ctx = canvas.getContext('2d');
 const controls = {
-  objType: $('objType'),
   degree: $('degree'),
   resolution: $('resolution'),
   speed: $('speed'),
@@ -90,18 +71,26 @@ let points = [];
 let alpha = 0;
 let beta = 0;
 let running = true;
-let legendRange = {min: 0, max: 1};
 
 function cmul(a, b) {
-  return { re: a.re * b.re - a.im * b.im, im: a.re * b.im + a.im * b.re };
+  return {
+    re: a.re * b.re - a.im * b.im,
+    im: a.re * b.im + a.im * b.re
+  };
 }
 
 function ccos(z) {
-  return { re: Math.cos(z.re) * Math.cosh(z.im), im: -Math.sin(z.re) * Math.sinh(z.im) };
+  return {
+    re: Math.cos(z.re) * Math.cosh(z.im),
+    im: -Math.sin(z.re) * Math.sinh(z.im)
+  };
 }
 
 function csin(z) {
-  return { re: Math.sin(z.re) * Math.cosh(z.im), im: Math.cos(z.re) * Math.sinh(z.im) };
+  return {
+    re: Math.sin(z.re) * Math.cosh(z.im),
+    im: Math.cos(z.re) * Math.sinh(z.im)
+  };
 }
 
 function cpow(z, p) {
@@ -109,7 +98,10 @@ function cpow(z, p) {
   if (r === 0) return { re: 0, im: 0 };
   const th = Math.atan2(z.im, z.re);
   const rp = Math.pow(r, p);
-  return { re: rp * Math.cos(th * p), im: rp * Math.sin(th * p) };
+  return {
+    re: rp * Math.cos(th * p),
+    im: rp * Math.sin(th * p)
+  };
 }
 
 function phase(k, n) {
@@ -117,12 +109,18 @@ function phase(k, n) {
   return { re: Math.cos(a), im: Math.sin(a) };
 }
 
-function generateCyPatch(n, res) {
-  const pts = [];
+function generate() {
+  const n = Number(controls.degree.value);
+  const res = Number(controls.resolution.value);
+  points = [];
+
   const eps = 1e-9;
-  const u0 = 0.0, u1 = Math.PI / 2 - eps;
-  const v0 = -Math.PI / 2 + eps, v1 = Math.PI / 2 - eps;
+  const u0 = 0.0;
+  const u1 = Math.PI / 2 - eps;
+  const v0 = -Math.PI / 2 + eps;
+  const v1 = Math.PI / 2 - eps;
   const exponent = 2 / n;
+
   for (let k1 = 0; k1 < n; k1++) {
     const ph1 = phase(k1, n);
     for (let k2 = 0; k2 < n; k2++) {
@@ -132,117 +130,39 @@ function generateCyPatch(n, res) {
         for (let j = 0; j <= res; j++) {
           const v = v0 + (v1 - v0) * (j / res);
           const xi = { re: u, im: v };
+
           const c = cpow(ccos(xi), exponent);
           const s = cpow(csin(xi), exponent);
           const z1 = cmul(ph1, c);
           const z2 = cmul(ph2, s);
           const p = [z1.re, z1.im, z2.re, z2.im];
-          if (p.every(Number.isFinite)) pts.push(p);
+
+          if (p.every(Number.isFinite)) {
+            points.push(p);
+          }
         }
       }
     }
   }
-  return pts;
-}
-
-function generateCliffordTorus(nu, nv) {
-  const pts = [];
-  const r = 1 / Math.sqrt(2);
-  const twoPi = 2 * Math.PI;
-  for (let i = 0; i < nu; i++) {
-    const u = twoPi * (i / nu);
-    const cu = r * Math.cos(u);
-    const su = r * Math.sin(u);
-    for (let j = 0; j < nv; j++) {
-      const v = twoPi * (j / nv);
-      pts.push([cu, su, r * Math.cos(v), r * Math.sin(v)]);
-    }
-  }
-  return pts;
-}
-
-function generateHypercube(dim, steps) {
-  const pts = [];
-  const step = 1.0 / (steps - 1);
-  const total = Math.pow(steps, dim);
-  for (let idx = 0; idx < total; idx++) {
-    const p = [];
-    let rem = idx;
-    for (let d = 0; d < dim; d++) {
-      p.push((rem % steps) * step);
-      rem = Math.floor(rem / steps);
-    }
-    pts.push(p);
-  }
-  return pts;
-}
-
-function generateSphere(dim, samples) {
-  const pts = [];
-  for (let s = 0; s < samples; s++) {
-    const v = [];
-    for (let d = 0; d < dim; d++) v.push(Math.random() * 2 - 1);
-    const n = Math.sqrt(v.reduce((a, x) => a + x * x, 0));
-    if (n > 1e-12) pts.push(v.map(x => x / n));
-  }
-  return pts;
-}
-
-function generateDomain(dim, samples) {
-  const pts = [];
-  for (let s = 0; s < samples; s++) {
-    const v = [];
-    for (let d = 0; d < dim; d++) v.push(Math.random() * 2 - 1);
-    pts.push(v);
-  }
-  return pts;
-}
-
-function generate() {
-  const type = controls.objType.value;
-  const deg = Number(controls.degree.value);
-  const res = Number(controls.resolution.value);
-
-  if (type === 'cy-patch') points = generateCyPatch(deg, res);
-  else if (type === 'clifford-torus') points = generateCliffordTorus(res + 8, res + 8);
-  else if (type === 'hypercube') points = generateHypercube(6, Math.min(res, 5));
-  else if (type === 'sphere') points = generateSphere(4, res * res);
-  else if (type === 'domain') points = generateDomain(11, res * res);
-  else points = [];
 
   updateLabels();
   updateInfo();
 }
 
-function getObjectDim() {
-  const type = controls.objType.value;
-  if (type === 'cy-patch' || type === 'clifford-torus' || type === 'sphere') return 4;
-  if (type === 'hypercube') return 6;
-  if (type === 'domain') return 11;
-  return 4;
-}
-
 function rotate4(p, a, b) {
-  const x = p[0], y = p[1], z = p[2], w = p[3];
-  const ca = Math.cos(a), sa = Math.sin(a);
+  const [x, y, z, w] = p;
+
+  const ca = Math.cos(a);
+  const sa = Math.sin(a);
   const x1 = x * ca - z * sa;
   const z1 = x * sa + z * ca;
-  const cb = Math.cos(b), sb = Math.sin(b);
+
+  const cb = Math.cos(b);
+  const sb = Math.sin(b);
   const y1 = y * cb - w * sb;
   const w1 = y * sb + w * cb;
-  return [x1, y1, z1, w1];
-}
 
-function projectHighDim(p, a, b) {
-  const dim = getObjectDim();
-  if (dim === 4) return rotate4(p, a, b);
-  const ca = Math.cos(a), sa = Math.sin(a);
-  const cb = Math.cos(b), sb = Math.sin(b);
-  const x = p[0] * ca - p[1] * sa;
-  const y = p[0] * sa + p[1] * ca;
-  const z = p[2] * cb - p[3] * sb;
-  const w = p[2] * sb + p[3] * cb;
-  return [x, y, z, w];
+  return [x1, y1, z1, w1];
 }
 
 function colorValue(r) {
@@ -260,6 +180,7 @@ function draw() {
   ctx.fillStyle = '#07090d';
   ctx.fillRect(0, 0, W, H);
 
+  if (!points.length) return;
 
   const projected = [];
   let minX = Infinity, maxX = -Infinity;
@@ -267,10 +188,13 @@ function draw() {
   let minV = Infinity, maxV = -Infinity;
 
   for (const p of points) {
-    const r = projectHighDim(p, alpha, beta);
-    const x = r[0], y = r[1];
+    const r = rotate4(p, alpha, beta);
+    const x = r[0];
+    const y = r[1];
     const v = colorValue(r);
+
     projected.push([x, y, v]);
+
     if (x < minX) minX = x;
     if (x > maxX) maxX = x;
     if (y < minY) minY = y;
@@ -278,9 +202,6 @@ function draw() {
     if (v < minV) minV = v;
     if (v > maxV) maxV = v;
   }
-
-  legendRange = {min: minV, max: maxV};
-  updateLegend();
 
   const rangeX = (maxX - minX) || 1;
   const rangeY = (maxY - minY) || 1;
@@ -298,18 +219,12 @@ function draw() {
     const sy = H - margin - offY - (y - minY) * scale;
     const t = (v - minV) / rangeV;
     const hue = (0.65 - 0.65 * t) * 360;
-    ctx.fillStyle = 'hsl(' + hue + ', 85%, 55%)';
+
+    ctx.fillStyle = `hsl(${hue}, 85%, 55%)`;
     ctx.fillRect(sx - size / 2, sy - size / 2, size, size);
   }
 
   ctx.globalAlpha = 1;
-}
-
-function updateLegend() {
-  const el = $('legend');
-  el.style.background = 'linear-gradient(to right, hsl(234, 85%, 55%), hsl(0, 85%, 55%))';
-  $('legendMin').textContent = legendRange.min.toFixed(2);
-  $('legendMax').textContent = legendRange.max.toFixed(2);
 }
 
 function updateLabels() {
@@ -320,35 +235,15 @@ function updateLabels() {
 }
 
 function updateInfo() {
-  const type = controls.objType.value;
-  const dim = getObjectDim();
   $('info').textContent =
-    'object: ' + type + '
-' +
-    'original dim: R^' + dim + '
-' +
-    'projected dim: R^2
-' +
-    'hidden coords: ' + (dim - 2) + '
-' +
-    'points: ' + points.length + '
-' +
-    'degree: ' + controls.degree.value + '
-' +
-    'resolution: ' + controls.resolution.value + '
-' +
-    'alpha: ' + alpha.toFixed(4) + '
-' +
-    'beta: ' + beta.toFixed(4) + '
-' +
-    'color encodes: ' + controls.colorBy.value + '
-
-' +
-    'Educational projection only.
-' +
-    'Not a full Calabi-Yau threefold.
-' +
-    'No external dependencies.';
+    `points: ${points.length}\n` +
+    `degree: ${controls.degree.value}\n` +
+    `resolution: ${controls.resolution.value}\n` +
+    `alpha: ${alpha.toFixed(4)}\n` +
+    `beta: ${beta.toFixed(4)}\n\n` +
+    `Educational projection only.\n` +
+    `Not a full Calabi-Yau threefold.\n` +
+    `No external dependencies.`;
 }
 
 function tick() {
@@ -362,7 +257,7 @@ function tick() {
   requestAnimationFrame(tick);
 }
 
-['objType', 'degree', 'resolution'].forEach((id) => {
+['degree', 'resolution'].forEach((id) => {
   controls[id].addEventListener('input', () => {
     updateLabels();
     generate();
@@ -373,11 +268,8 @@ function tick() {
   controls[id].addEventListener('input', updateLabels);
 });
 
-controls.colorBy.addEventListener('input', () => {
-  updateInfo();
-});
-
 $('regen').addEventListener('click', generate);
+$('pause').addEventListener('click', () => { running = !running; });
 $('png').addEventListener('click', () => {
   const a = document.createElement('a');
   a.download = 'calabi-yau-projection.png';

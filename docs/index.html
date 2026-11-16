@@ -10,20 +10,22 @@ body { margin:0; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, mon
 header { padding:16px 20px; border-bottom:1px solid #1e2633; }
 h1 { margin:0 0 6px; font-size:20px; }
 p { margin:0; color:#9fb0c0; font-size:13px; }
-main { display:grid; grid-template-columns: 1fr 360px; gap:16px; padding:16px; }
+main { display:grid; grid-template-columns: minmax(0,1fr) 360px; gap:16px; padding:16px; align-items:start; }
+.stage { display:flex; flex-direction:column; gap:12px; min-width:0; }
 canvas { width:100%; height:auto; background:#07090d; border:1px solid #1e2633; border-radius:8px; }
-aside { display:flex; flex-direction:column; gap:10px; min-width:320px; }
+aside { display:flex; flex-direction:column; gap:10px; min-width:0; }
 label { display:block; font-size:12px; color:#9fb0c0; }
 input[type=range], select, button { width:100%; box-sizing:border-box; }
 button { padding:8px; background:#152033; color:#d8e1ea; border:1px solid #263b5f; border-radius:6px; cursor:pointer; }
 button:hover { background:#1d2d49; }
-pre { white-space:pre-wrap; background:#07090d; border:1px solid #1e2633; padding:10px; border-radius:6px; font-size:12px; min-height:180px; max-height:320px; overflow:auto; }
+pre { white-space:pre-wrap; background:#07090d; border:1px solid #1e2633; padding:10px; border-radius:6px; font-size:12px; min-height:150px; max-height:260px; overflow:auto; }
 .legend { height:14px; border-radius:3px; margin:4px 0; background:linear-gradient(to right, hsl(234,85%,55%), hsl(0,85%,55%)); }
 .legend-labels { display:flex; justify-content:space-between; font-size:11px; color:#9fb0c0; }
 .note { font-size:12px; color:#b7c5d3; background:#07090d; border:1px solid #1e2633; padding:8px; border-radius:6px; min-height:48px; }
 details { border:1px solid #1e2633; border-radius:6px; padding:8px; background:#07090d; }
 summary { cursor:pointer; color:#9fb0c0; font-size:12px; }
-.eq { margin:10px 0; padding-bottom:8px; border-bottom:1px solid #18202b; }
+.eq-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:10px; margin-top:8px; }
+.eq { margin:0; padding:8px; border:1px solid #18202b; border-radius:6px; background:#07090d; }
 .eq h3 { margin:0 0 6px; font-size:13px; color:#d8e1ea; }
 .eq p { margin:4px 0 0; font-size:12px; color:#9fb0c0; }
 math { display:block; margin:6px 0; color:#e8f0f8; font-size:1.05em; overflow-x:auto; }
@@ -40,7 +42,39 @@ footer a:hover { text-decoration:underline; }
 <p>Zero-dependency educational lab. Projections, slices, Clifford torus, Fermat patches and exact topology notes. Not a full 6D threefold renderer or physics simulation.</p>
 </header>
 <main>
+<section class="stage">
 <canvas id="view" width="960" height="720"></canvas>
+<pre id="info"></pre>
+<details open>
+<summary>Core equations / Ecuaciones clave</summary>
+<div class="eq-grid">
+<div class="eq"><h3>Orthogonal projection R^n -> R^2</h3>
+<math display="block"><mrow><mi>π</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mo>(</mo><mo>⟨</mo><mi>x</mi><mo>,</mo><msub><mi>u</mi><mn>1</mn></msub><mo>⟩</mo><mo>,</mo><mo>⟨</mo><mi>x</mi><mo>,</mo><msub><mi>u</mi><mn>2</mn></msub><mo>⟩</mo><mo>)</mo></mrow></math>
+<p>The basis u1,u2 is a chosen 2-plane. Changing the seed changes the camera, not the object.</p>
+</div>
+<div class="eq"><h3>Clifford torus in R^4</h3>
+<math display="block"><mrow><mi>T</mi><mo>(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>)</mo><mo>=</mo><mo>(</mo><mi>r</mi><mo>cos</mo><mi>u</mi><mo>,</mo><mi>r</mi><mo>sin</mo><mi>u</mi><mo>,</mo><mi>r</mi><mo>cos</mo><mi>v</mi><mo>,</mo><mi>r</mi><mo>sin</mo><mi>v</mi><mo>)</mo><mo>,</mo><mspace width="1em"/><mi>r</mi><mo>=</mo><mn>1</mn><mo>/</mo><msqrt><mn>2</mn></msqrt></mrow></math>
+<p>For r=1/sqrt(2), T is S^1 x S^1 embedded in the unit 3-sphere S^3.</p>
+</div>
+<div class="eq"><h3>Fermat patch</h3>
+<math display="block"><mrow><msub><mi>z</mi><mn>1</mn></msub><mo>^</mo><mi>n</mi><mo>+</mo><msub><mi>z</mi><mn>2</mn></msub><mo>^</mo><mi>n</mi><mo>=</mo><mn>1</mn></mrow></math>
+<p>Complex curve in C^2, real 2D surface in R^4, with n^2 phase patches. Not a full Calabi-Yau threefold.</p>
+</div>
+<div class="eq"><h3>Quintic Calabi-Yau threefold</h3>
+<math display="block"><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>0</mn></mrow><mn>4</mn></munderover><msubsup><mi>Z</mi><mi>i</mi><mn>5</mn></msubsup><mo>=</mo><mn>0</mn><mo>,</mo><mspace width="1em"/><mi>X</mi><mo>⊂</mo><mi>C</mi><msup><mi>P</mi><mn>4</mn></msup></mrow></math>
+<p>Complex dimension 3, real dimension 6. Exact invariants: h11=1, h21=101, chi=-200.</p>
+</div>
+<div class="eq"><h3>Euler characteristic from Hodge numbers</h3>
+<math display="block"><mrow><mi>χ</mi><mo>=</mo><munder><mo>∑</mo><mrow><mi>p</mi><mo>,</mo><mi>q</mi></mrow></munder><msup><mrow><mo>(</mo><mo>-</mo><mn>1</mn><mo>)</mo></mrow><mrow><mi>p</mi><mo>+</mo><mi>q</mi></mrow></msup><msup><mi>h</mi><mrow><mi>p</mi><mo>,</mo><mi>q</mi></mrow></msup></mrow></math>
+<p>The Python topology module computes these with exact integers for supported Fermat families.</p>
+</div>
+<div class="eq"><h3>PSM note: future metric layer</h3>
+<math display="block"><mrow><msup><mrow><mo>(</mo><mi>ω</mi><mo>+</mo><mi>i</mi><mo>∂</mo><mover><mo>∂</mo><mo>¯</mo></mover><mi>φ</mi><mo>)</mo></mrow><mn>3</mn></msup><mo>=</mo><msup><mi>e</mi><mi>f</mi></msup><msup><mi>ω</mi><mn>3</mn></msup></mrow></math>
+<p>Complex Monge-Ampere type equation behind Ricci-flat CY metrics. Documented as future layer, not implemented in the zero-dependency core.</p>
+</div>
+</div>
+</details>
+</section>
 <aside>
 <label>Object
 <select id="objType">
@@ -55,6 +89,7 @@ footer a:hover { text-decoration:underline; }
 <label>Resolution <input id="resolution" type="range" min="4" max="28" step="1" value="16"><span id="resolutionVal">16</span></label>
 <label>Speed <input id="speed" type="range" min="0" max="30" step="1" value="8"><span id="speedVal">8</span></label>
 <label>Point size <input id="size" type="range" min="1" max="6" step="1" value="2"><span id="sizeVal">2</span></label>
+<label>Seed (camera) <input id="seed" type="range" min="1" max="99" step="1" value="17"><span id="seedVal">17</span></label>
 <label>Color by
 <select id="colorBy">
 <option value="radius">radius</option>
@@ -62,40 +97,12 @@ footer a:hover { text-decoration:underline; }
 <option value="coord2">coordinate 2</option>
 </select>
 </label>
-<button id="regen">Regenerate</button>
+<button id="regen">Regenerate (next seed)</button>
 <button id="pause">Pause / Play</button>
 <button id="png">Export PNG</button>
 <div class="legend" id="legend"></div>
 <div class="legend-labels"><span id="legendMin">min</span><span id="legendMax">max</span></div>
 <div class="note" id="objectNote"></div>
-<details open>
-<summary>Core equations / Ecuaciones clave</summary>
-<div class="eq"><h3>Orthogonal projection R^n -> R^2</h3>
-<math display="block"><mrow><mi>π</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mo>(</mo><mo>⟨</mo><mi>x</mi><mo>,</mo><msub><mi>u</mi><mn>1</mn></msub><mo>⟩</mo><mo>,</mo><mo>⟨</mo><mi>x</mi><mo>,</mo><msub><mi>u</mi><mn>2</mn></msub><mo>⟩</mo><mo>)</mo></mrow></math>
-<p>The basis u1,u2 is a chosen 2-plane. Changing the seed changes the camera, not the object.</p>
-</div>
-<div class="eq"><h3>Clifford torus in R^4</h3>
-<math display="block"><mrow><mi>T</mi><mo>(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>)</mo><mo>=</mo><mo>(</mo><mi>r</mi><mo>cos</mo><mi>u</mi><mo>,</mo><mi>r</mi><mo>sin</mo><mi>u</mi><mo>,</mo><mi>r</mi><mo>cos</mo><mi>v</mi><mo>,</mo><mi>r</mi><mo>sin</mo><mi>v</mi><mo>)</mo><mo>,</mo><mspace width="1em"/><mi>r</mi><mo>=</mo><mn>1</mn><mo>/</mo><msqrt><mn>2</mn></msqrt></mrow></math>
-<p>For r=1/sqrt(2), T is S^1 x S^1 embedded in the unit 3-sphere S^3.</p>
-</div>
-<div class="eq"><h3>Fermat patch</h3>
-<math display="block"><mrow><msub><mi>z</mi><mn>1</mn></msub><mo>^</mo><mi>n</mi><mo>+</mo><msub><mi>z</mi><mn>2</mn></msub><mo>^</mo><mi>n</mi><mo>=</mo><mn>1</mn></mrow></math>
-<p>This is a complex curve in C^2, real 2D surface in R^4. It has n^2 phase patches. It is not a full Calabi-Yau threefold.</p>
-</div>
-<div class="eq"><h3>Quintic Calabi-Yau threefold</h3>
-<math display="block"><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>0</mn></mrow><mn>4</mn></munderover><msubsup><mi>Z</mi><mi>i</mi><mn>5</mn></msubsup><mo>=</mo><mn>0</mn><mo>,</mo><mspace width="1em"/><mi>X</mi><mo>⊂</mo><mi>C</mi><msup><mi>P</mi><mn>4</mn></msup></mrow></math>
-<p>Complex dimension 3, real dimension 6. Known exact invariants: h^{1,1}=1, h^{2,1}=101, χ=-200.</p>
-</div>
-<div class="eq"><h3>Euler characteristic from Hodge numbers</h3>
-<math display="block"><mrow><mi>χ</mi><mo>=</mo><munder><mo>∑</mo><mrow><mi>p</mi><mo>,</mo><mi>q</mi></mrow></munder><msup><mrow><mo>(</mo><mo>-</mo><mn>1</mn><mo>)</mo></mrow><mrow><mi>p</mi><mo>+</mo><mi>q</mi></mrow></msup><msup><mi>h</mi><mrow><mi>p</mi><mo>,</mo><mi>q</mi></mrow></msup></mrow></math>
-<p>The Python topology module computes these values with exact integers for supported Fermat families.</p>
-</div>
-<div class="eq"><h3>PSM note: pseudo-spectral method / future metric layer</h3>
-<math display="block"><mrow><msup><mrow><mo>(</mo><mi>ω</mi><mo>+</mo><mi>i</mi><mo>∂</mo><mover><mo>∂</mo><mo>¯</mo></mover><mi>φ</mi><mo>)</mo></mrow><mn>3</mn></msup><mo>=</mo><msup><mi>e</mi><mi>f</mi></msup><msup><mi>ω</mi><mn>3</mn></msup></mrow></math>
-<p>This is the type of complex Monge-Ampere equation behind Ricci-flat Calabi-Yau metrics. It is documented here as a future scientific layer, not implemented in the zero-dependency core.</p>
-</div>
-</details>
-<pre id="info"></pre>
 <div class="notice">«Tecnósfera al servicio de la Biósfera.» — «La Paz Es El Camino.»</div>
 </aside>
 </main>
@@ -106,15 +113,16 @@ Source: <a href="https://github.com/amurlaniakea/calabi-yau-projection-lab">gith
 const $ = (id) => document.getElementById(id);
 const canvas = $('view');
 const ctx = canvas.getContext('2d');
-const controls = { objType:$('objType'), degree:$('degree'), resolution:$('resolution'), speed:$('speed'), size:$('size'), colorBy:$('colorBy') };
-const labels = { degree:$('degreeVal'), resolution:$('resolutionVal'), speed:$('speedVal'), size:$('sizeVal') };
+const controls = { objType:$('objType'), degree:$('degree'), resolution:$('resolution'), speed:$('speed'), size:$('size'), seed:$('seed'), colorBy:$('colorBy') };
+const labels = { degree:$('degreeVal'), resolution:$('resolutionVal'), speed:$('speedVal'), size:$('sizeVal'), seed:$('seedVal') };
 let points = [];
 let currentBasis = [];
 let alpha = 0;
 let beta = 0;
 let running = true;
 let legendRange = { min: 0, max: 1 };
-const SEED = 17;
+
+function getSeed() { return Number(controls.seed.value); }
 
 function mulberry32(a) {
   return function() {
@@ -281,7 +289,7 @@ function objectNote(type, deg, res) {
     return 'Clifford torus S^1 x S^1 in R^4. With r=1/sqrt(2) it lies on S^3. Grid: ' + (res+8) + ' x ' + (res+8) + '.';
   }
   if (type === 'hypercube') {
-    return 'Discrete hypercube grid in [0,1]^6. Steps are capped for responsiveness. Projection hides adjacency and metric information.';
+    return 'Discrete hypercube grid in [0,1]^6. Steps capped for responsiveness. Projection hides adjacency and metric information.';
   }
   if (type === 'sphere') {
     return 'Sampled unit 4-sphere S^3 in R^4. Each point has norm approximately 1.';
@@ -293,13 +301,14 @@ function generate() {
   const type = controls.objType.value;
   const deg = Number(controls.degree.value);
   const res = Number(controls.resolution.value);
+  const sd = getSeed();
   if (type === 'cy-patch') points = generateCyPatch(deg, Math.min(res, 18));
   else if (type === 'clifford-torus') points = generateClifford(res + 8, res + 8);
   else if (type === 'hypercube') points = generateHypercube(6, Math.min(4, Math.max(2, Math.round(res / 8) + 2)));
-  else if (type === 'sphere') points = generateSphere(4, Math.min(4096, res * res), SEED);
-  else if (type === 'domain') points = generateDomain(11, Math.min(4096, res * res), SEED);
+  else if (type === 'sphere') points = generateSphere(4, Math.min(4096, res * res), sd);
+  else if (type === 'domain') points = generateDomain(11, Math.min(4096, res * res), sd);
   else points = [];
-  currentBasis = makeBasis(getObjectDim(), SEED);
+  currentBasis = makeBasis(getObjectDim(), sd);
   $('objectNote').textContent = objectNote(type, deg, res);
   updateLabels();
   updateInfo();
@@ -387,6 +396,7 @@ function updateLabels() {
   labels.resolution.textContent = controls.resolution.value;
   labels.speed.textContent = controls.speed.value;
   labels.size.textContent = controls.size.value;
+  labels.seed.textContent = controls.seed.value;
 }
 
 function updateInfo() {
@@ -400,17 +410,16 @@ function updateInfo() {
     'points: ' + points.length + '\n' +
     'degree: ' + controls.degree.value + '\n' +
     'resolution: ' + controls.resolution.value + '\n' +
+    'seed (camera): ' + getSeed() + '\n' +
     'alpha: ' + alpha.toFixed(4) + '\n' +
     'beta: ' + beta.toFixed(4) + '\n' +
-    'color encodes: ' + controls.colorBy.value + '\n' +
-    'basis seed: ' + SEED + '\n\n' +
-    'Exact topology reference (Python module):\n' +
+    'color encodes: ' + controls.colorBy.value + '\n\n' +
+    'Exact topology (Python module):\n' +
     'quintic CP4: h11=1 h21=101 chi=-200\n' +
     'K3 quartic: h20=1 h11=20 chi=24\n' +
     'elliptic cubic: h10=1 chi=0\n' +
     'cubic surface: not CY h11=7 chi=9\n\n' +
-    'Educational projection only.\n' +
-    'Not a full Calabi-Yau threefold.\n' +
+    'Educational projection only. Not a full Calabi-Yau threefold.\n' +
     'No external dependencies.';
 }
 
@@ -432,8 +441,15 @@ controls.objType.addEventListener('change', generate);
 ['speed', 'size'].forEach((id) => {
   controls[id].addEventListener('input', updateLabels);
 });
+controls.seed.addEventListener('input', generate);
 controls.colorBy.addEventListener('change', updateInfo);
-$('regen').addEventListener('click', generate);
+$('regen').addEventListener('click', () => {
+  let s = getSeed() + 1;
+  if (s > 99) s = 1;
+  controls.seed.value = String(s);
+  labels.seed.textContent = String(s);
+  generate();
+});
 $('pause').addEventListener('click', () => { running = (running === false); });
 $('png').addEventListener('click', () => {
   const a = document.createElement('a');

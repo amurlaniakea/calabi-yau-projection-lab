@@ -38,6 +38,7 @@ A professional, zero-dependency laboratory for projecting, slicing and visually 
 - [Physics-oriented roadmap](docs/05-physics-roadmap.md)
 - [Degree and patches clarification](docs/06-degree-and-patches.md)
 - [Equations, Clifford torus and PSM note](docs/07-equations-and-psm.md)
+- [Classroom lab sheet](docs/08-classroom-lab-sheet.md)
 
 
 This repository is intended as an open educational resource for

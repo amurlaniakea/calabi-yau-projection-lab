@@ -33,6 +33,10 @@ A professional, zero-dependency laboratory for projecting, slicing and visually 
 
 ## Pedagogy and audience
 
+- [Physics-oriented roadmap](docs/05-physics-roadmap.md)
+- [Degree and patches clarification](docs/06-degree-and-patches.md)
+
+
 This repository is intended as an open educational resource for
 university teaching, reproducible visualization and scientific outreach.
 

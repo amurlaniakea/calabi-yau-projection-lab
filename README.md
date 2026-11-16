@@ -31,6 +31,25 @@ A professional, zero-dependency laboratory for projecting, slicing and visually 
 - Local interactive HTML/Canvas demo, no CDN, no framework.
 - Tests as evidence.
 
+## Pedagogy and audience
+
+This repository is intended as an open educational resource for
+university teaching, reproducible visualization and scientific outreach.
+
+- [Pedagogical guide](docs/02-pedagogy.md)
+- [Research and professional use](docs/03-research-and-professional-use.md)
+- [Object gallery](docs/04-object-gallery.md)
+
+For instructors: use the CLI and local demo to show projections,
+slices and hidden-coordinate encoding.
+
+For researchers: treat outputs as reproducible educational projections
+and visual prototypes, not as rigorous computations of Calabi-Yau
+metrics, topology or physical compactification.
+
+For students: the key lesson is that a 2D image of a 6D/11D object
+is a shadow, cut or encoding, not the true form of the object.
+
 ## Architecture
 
     calabi-yau-projection-lab/

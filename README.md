@@ -83,19 +83,31 @@ For students: the key lesson is that a 2D image of a 6D/11D object is a shadow, 
 
 ## Quickstart
 
-From WSL:
+Pure Python 3 standard library plus static HTML/JS. Runs on Linux, macOS and Windows.
 
-    cd ~/calabi-yau-projection-lab
+Requires Python 3.10+ and Git. No third-party runtime dependencies.
+
+Clone and enter the repository:
+
+    git clone https://github.com/amurlaniakea/calabi-yau-projection-lab.git
+    cd calabi-yau-projection-lab
+
+Run tests and generate examples:
+
     make test
     make examples
 
-Open the local demo:
+If you do not have `make`:
 
-    explorer.exe "$(wslpath -w docs/index.html)"
+    PYTHONPATH=src python3 -m unittest discover -s tests -p 'test_*.py' -v
 
-Or use the public demo:
+Open the interactive demo:
 
-    https://amurlaniakea.github.io/calabi-yau-projection-lab/
+- Online: <https://amurlaniakea.github.io/calabi-yau-projection-lab/>
+- Local: open `docs/index.html` in any browser.
+- Linux: `xdg-open docs/index.html`
+- macOS: `open docs/index.html`
+- Windows PowerShell: `start docs\index.html`
 
 ## CLI examples
 

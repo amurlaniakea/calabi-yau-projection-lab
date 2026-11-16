@@ -25,16 +25,19 @@ A professional, zero-dependency laboratory for projecting, slicing and visually 
   - 11D random domain.
   - Flat torus fundamental domain.
   - Unit n-sphere sample.
+- Clifford torus in R^4.
   - Calabi–Yau-like Fermat patch in `R^4`.
 - Slices with frozen coordinates.
 - Reproducible SVG output and SHA-256 hashes.
 - Local interactive HTML/Canvas demo, no CDN, no framework.
+- Exact Fermat Hodge numbers and Euler characteristics.
 - Tests as evidence.
 
 ## Pedagogy and audience
 
 - [Physics-oriented roadmap](docs/05-physics-roadmap.md)
 - [Degree and patches clarification](docs/06-degree-and-patches.md)
+- [Equations, Clifford torus and PSM note](docs/07-equations-and-psm.md)
 
 
 This repository is intended as an open educational resource for
@@ -61,9 +64,10 @@ is a shadow, cut or encoding, not the true form of the object.
     │   ├── linalg.py          # dot, norm, Gram-Schmidt
     │   ├── basis.py           # deterministic orthonormal bases
     │   ├── project.py         # R^n -> R^2 projection
-    │   ├── manifolds.py       # hypercube, torus, sphere, CY-like patch
+    │   ├── manifolds.py       # hypercube, torus, sphere, CY-like patch, Clifford torus
     │   ├── slices.py          # fixed-coordinate slices
-    │   ├── render_svg.py      # reproducible SVG renderer
+    │   ├── topology.py        # exact Fermat Hodge numbers and Euler characteristic
+│   ├── render_svg.py      # reproducible SVG renderer
     │   └── cli.py             # command line interface
     ├── tests/
     │   └── test_core.py
@@ -94,6 +98,10 @@ Example CLI:
     PYTHONPATH=src python3 -m projection_lab.cli domain --dim 11 --samples 2500 --seed 2 --out examples/domain11d.svg
 
     PYTHONPATH=src python3 -m projection_lab.cli cy-patch --degree 5 --resolution 14 --seed 3 --out examples/cy_patch.svg
+
+PYTHONPATH=src python3 -m projection_lab.cli clifford-torus --samples-u 48 --samples-v 48 --seed 5 --out examples/clifford_torus.svg
+
+PYTHONPATH=src python3 -m projection_lab.cli topology --degree 5 --ambient 4 --out examples/topology_quintic.json
 
 ## Reproducibility contract
 

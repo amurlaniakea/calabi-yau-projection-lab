@@ -1,230 +1,385 @@
-
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Calabi–Yau Projection Lab — Local Demo</title>
+<title>Calabi-Yau Projection Lab</title>
 <style>
 :root { color-scheme: dark; }
 body { margin:0; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background:#0b0e14; color:#d8e1ea; }
 header { padding:16px 20px; border-bottom:1px solid #1e2633; }
 h1 { margin:0 0 6px; font-size:20px; }
 p { margin:0; color:#9fb0c0; font-size:13px; }
-main { display:grid; grid-template-columns: 1fr 320px; gap:16px; padding:16px; }
+main { display:grid; grid-template-columns: 1fr 360px; gap:16px; padding:16px; }
 canvas { width:100%; height:auto; background:#07090d; border:1px solid #1e2633; border-radius:8px; }
-aside { display:flex; flex-direction:column; gap:10px; }
+aside { display:flex; flex-direction:column; gap:10px; min-width:320px; }
 label { display:block; font-size:12px; color:#9fb0c0; }
 input[type=range], select, button { width:100%; box-sizing:border-box; }
 button { padding:8px; background:#152033; color:#d8e1ea; border:1px solid #263b5f; border-radius:6px; cursor:pointer; }
 button:hover { background:#1d2d49; }
-pre { white-space:pre-wrap; background:#07090d; border:1px solid #1e2633; padding:10px; border-radius:6px; font-size:12px; min-height:140px; }
+pre { white-space:pre-wrap; background:#07090d; border:1px solid #1e2633; padding:10px; border-radius:6px; font-size:12px; min-height:180px; max-height:320px; overflow:auto; }
+.legend { height:14px; border-radius:3px; margin:4px 0; background:linear-gradient(to right, hsl(234,85%,55%), hsl(0,85%,55%)); }
+.legend-labels { display:flex; justify-content:space-between; font-size:11px; color:#9fb0c0; }
+.note { font-size:12px; color:#b7c5d3; background:#07090d; border:1px solid #1e2633; padding:8px; border-radius:6px; min-height:48px; }
+details { border:1px solid #1e2633; border-radius:6px; padding:8px; background:#07090d; }
+summary { cursor:pointer; color:#9fb0c0; font-size:12px; }
+.eq { margin:10px 0; padding-bottom:8px; border-bottom:1px solid #18202b; }
+.eq h3 { margin:0 0 6px; font-size:13px; color:#d8e1ea; }
+.eq p { margin:4px 0 0; font-size:12px; color:#9fb0c0; }
+math { display:block; margin:6px 0; color:#e8f0f8; font-size:1.05em; overflow-x:auto; }
 .notice { font-size:12px; color:#8a98a8; border-top:1px solid #1e2633; padding-top:10px; }
-@media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+footer { padding:12px 20px; border-top:1px solid #1e2633; font-size:12px; color:#8a98a8; }
+footer a { color:#7fd1ff; text-decoration:none; }
+footer a:hover { text-decoration:underline; }
+@media (max-width: 980px) { main { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 <header>
-<h1>Calabi–Yau Projection Lab</h1>
-<p>Zero-dependency local demo. Educational projection of a Calabi–Yau-like Fermat patch, not a full 6D threefold or physics simulation.</p>
+<h1>Calabi-Yau Projection Lab</h1>
+<p>Zero-dependency educational lab. Projections, slices, Clifford torus, Fermat patches and exact topology notes. Not a full 6D threefold renderer or physics simulation.</p>
 </header>
 <main>
 <canvas id="view" width="960" height="720"></canvas>
 <aside>
+<label>Object
+<select id="objType">
+<option value="cy-patch">Calabi-Yau-like Fermat patch (R^4)</option>
+<option value="clifford-torus">Clifford torus (R^4)</option>
+<option value="hypercube">Hypercube (R^6)</option>
+<option value="sphere">Unit 4-sphere sample (R^4)</option>
+<option value="domain">Random domain (R^11)</option>
+</select>
+</label>
 <label>Degree <input id="degree" type="range" min="3" max="8" step="1" value="5"><span id="degreeVal">5</span></label>
 <label>Resolution <input id="resolution" type="range" min="4" max="28" step="1" value="16"><span id="resolutionVal">16</span></label>
 <label>Speed <input id="speed" type="range" min="0" max="30" step="1" value="8"><span id="speedVal">8</span></label>
 <label>Point size <input id="size" type="range" min="1" max="6" step="1" value="2"><span id="sizeVal">2</span></label>
 <label>Color by
 <select id="colorBy">
-<option value="w">hidden w</option>
-<option value="z">hidden z</option>
 <option value="radius">radius</option>
+<option value="last">last coordinate</option>
+<option value="coord2">coordinate 2</option>
 </select>
 </label>
 <button id="regen">Regenerate</button>
 <button id="pause">Pause / Play</button>
 <button id="png">Export PNG</button>
+<div class="legend" id="legend"></div>
+<div class="legend-labels"><span id="legendMin">min</span><span id="legendMax">max</span></div>
+<div class="note" id="objectNote"></div>
+<details open>
+<summary>Core equations / Ecuaciones clave</summary>
+<div class="eq"><h3>Orthogonal projection R^n -> R^2</h3>
+<math display="block"><mrow><mi>π</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mo>(</mo><mo>⟨</mo><mi>x</mi><mo>,</mo><msub><mi>u</mi><mn>1</mn></msub><mo>⟩</mo><mo>,</mo><mo>⟨</mo><mi>x</mi><mo>,</mo><msub><mi>u</mi><mn>2</mn></msub><mo>⟩</mo><mo>)</mo></mrow></math>
+<p>The basis u1,u2 is a chosen 2-plane. Changing the seed changes the camera, not the object.</p>
+</div>
+<div class="eq"><h3>Clifford torus in R^4</h3>
+<math display="block"><mrow><mi>T</mi><mo>(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>)</mo><mo>=</mo><mo>(</mo><mi>r</mi><mo>cos</mo><mi>u</mi><mo>,</mo><mi>r</mi><mo>sin</mo><mi>u</mi><mo>,</mo><mi>r</mi><mo>cos</mo><mi>v</mi><mo>,</mo><mi>r</mi><mo>sin</mo><mi>v</mi><mo>)</mo><mo>,</mo><mspace width="1em"/><mi>r</mi><mo>=</mo><mn>1</mn><mo>/</mo><msqrt><mn>2</mn></msqrt></mrow></math>
+<p>For r=1/sqrt(2), T is S^1 x S^1 embedded in the unit 3-sphere S^3.</p>
+</div>
+<div class="eq"><h3>Fermat patch</h3>
+<math display="block"><mrow><msub><mi>z</mi><mn>1</mn></msub><mo>^</mo><mi>n</mi><mo>+</mo><msub><mi>z</mi><mn>2</mn></msub><mo>^</mo><mi>n</mi><mo>=</mo><mn>1</mn></mrow></math>
+<p>This is a complex curve in C^2, real 2D surface in R^4. It has n^2 phase patches. It is not a full Calabi-Yau threefold.</p>
+</div>
+<div class="eq"><h3>Quintic Calabi-Yau threefold</h3>
+<math display="block"><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>0</mn></mrow><mn>4</mn></munderover><msubsup><mi>Z</mi><mi>i</mi><mn>5</mn></msubsup><mo>=</mo><mn>0</mn><mo>,</mo><mspace width="1em"/><mi>X</mi><mo>⊂</mo><mi>C</mi><msup><mi>P</mi><mn>4</mn></msup></mrow></math>
+<p>Complex dimension 3, real dimension 6. Known exact invariants: h^{1,1}=1, h^{2,1}=101, χ=-200.</p>
+</div>
+<div class="eq"><h3>Euler characteristic from Hodge numbers</h3>
+<math display="block"><mrow><mi>χ</mi><mo>=</mo><munder><mo>∑</mo><mrow><mi>p</mi><mo>,</mo><mi>q</mi></mrow></munder><msup><mrow><mo>(</mo><mo>-</mo><mn>1</mn><mo>)</mo></mrow><mrow><mi>p</mi><mo>+</mo><mi>q</mi></mrow></msup><msup><mi>h</mi><mrow><mi>p</mi><mo>,</mo><mi>q</mi></mrow></msup></mrow></math>
+<p>The Python topology module computes these values with exact integers for supported Fermat families.</p>
+</div>
+<div class="eq"><h3>PSM note: pseudo-spectral method / future metric layer</h3>
+<math display="block"><mrow><msup><mrow><mo>(</mo><mi>ω</mi><mo>+</mo><mi>i</mi><mo>∂</mo><mover><mo>∂</mo><mo>¯</mo></mover><mi>φ</mi><mo>)</mo></mrow><mn>3</mn></msup><mo>=</mo><msup><mi>e</mi><mi>f</mi></msup><msup><mi>ω</mi><mn>3</mn></msup></mrow></math>
+<p>This is the type of complex Monge-Ampere equation behind Ricci-flat Calabi-Yau metrics. It is documented here as a future scientific layer, not implemented in the zero-dependency core.</p>
+</div>
+</details>
 <pre id="info"></pre>
 <div class="notice">«Tecnósfera al servicio de la Biósfera.» — «La Paz Es El Camino.»</div>
 </aside>
 </main>
+<footer>
+Source: <a href="https://github.com/amurlaniakea/calabi-yau-projection-lab">github.com/amurlaniakea/calabi-yau-projection-lab</a>
+</footer>
 <script>
 const $ = (id) => document.getElementById(id);
 const canvas = $('view');
 const ctx = canvas.getContext('2d');
-const controls = {
-  degree: $('degree'),
-  resolution: $('resolution'),
-  speed: $('speed'),
-  size: $('size'),
-  colorBy: $('colorBy')
-};
-const labels = {
-  degree: $('degreeVal'),
-  resolution: $('resolutionVal'),
-  speed: $('speedVal'),
-  size: $('sizeVal')
-};
-
+const controls = { objType:$('objType'), degree:$('degree'), resolution:$('resolution'), speed:$('speed'), size:$('size'), colorBy:$('colorBy') };
+const labels = { degree:$('degreeVal'), resolution:$('resolutionVal'), speed:$('speedVal'), size:$('sizeVal') };
 let points = [];
+let currentBasis = [];
 let alpha = 0;
 let beta = 0;
 let running = true;
+let legendRange = { min: 0, max: 1 };
+const SEED = 17;
 
-function cmul(a, b) {
-  return {
-    re: a.re * b.re - a.im * b.im,
-    im: a.re * b.im + a.im * b.re
+function mulberry32(a) {
+  return function() {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
   };
 }
 
-function ccos(z) {
-  return {
-    re: Math.cos(z.re) * Math.cosh(z.im),
-    im: -Math.sin(z.re) * Math.sinh(z.im)
-  };
+function gauss(rng) {
+  let u = 0, v = 0;
+  while (u === 0) u = rng();
+  while (v === 0) v = rng();
+  return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
 }
 
-function csin(z) {
-  return {
-    re: Math.sin(z.re) * Math.cosh(z.im),
-    im: Math.cos(z.re) * Math.sinh(z.im)
-  };
+function dot(a, b) {
+  let s = 0;
+  for (let i = 0; i < a.length; i++) s += a[i] * b[i];
+  return s;
 }
 
+function norm(a) { return Math.sqrt(dot(a, a)); }
+
+function gramSchmidt(vectors) {
+  const ortho = [];
+  for (const v of vectors) {
+    let w = v.slice();
+    for (const u of ortho) {
+      const c = dot(w, u);
+      for (let i = 0; i < w.length; i++) w[i] -= c * u[i];
+    }
+    const n = norm(w);
+    if (n > 1e-12) ortho.push(w.map(x => x / n));
+    if (ortho.length === 2) break;
+  }
+  return ortho;
+}
+
+function makeBasis(dim, seed) {
+  const rng = mulberry32(seed);
+  const vectors = [];
+  for (let k = 0; k < 2; k++) {
+    const v = [];
+    for (let i = 0; i < dim; i++) v.push(gauss(rng));
+    vectors.push(v);
+  }
+  let basis = gramSchmidt(vectors);
+  if (basis.length < 2) {
+    basis = [];
+    for (let k = 0; k < 2; k++) {
+      const e = new Array(dim).fill(0);
+      e[k] = 1;
+      basis.push(e);
+    }
+  }
+  return basis;
+}
+
+function cmul(a, b) { return { re: a.re*b.re - a.im*b.im, im: a.re*b.im + a.im*b.re }; }
+function ccos(z) { return { re: Math.cos(z.re)*Math.cosh(z.im), im: -Math.sin(z.re)*Math.sinh(z.im) }; }
+function csin(z) { return { re: Math.sin(z.re)*Math.cosh(z.im), im: Math.cos(z.re)*Math.sinh(z.im) }; }
 function cpow(z, p) {
   const r = Math.hypot(z.re, z.im);
   if (r === 0) return { re: 0, im: 0 };
   const th = Math.atan2(z.im, z.re);
   const rp = Math.pow(r, p);
-  return {
-    re: rp * Math.cos(th * p),
-    im: rp * Math.sin(th * p)
-  };
+  return { re: rp*Math.cos(th*p), im: rp*Math.sin(th*p) };
 }
-
-function phase(k, n) {
-  const a = 2 * Math.PI * k / n;
-  return { re: Math.cos(a), im: Math.sin(a) };
-}
-
-function generate() {
-  const n = Number(controls.degree.value);
-  const res = Number(controls.resolution.value);
-  points = [];
-
+function cphase(k, n) { const a = 2*Math.PI*k/n; return { re: Math.cos(a), im: Math.sin(a) }; }
+function generateCyPatch(n, res) {
+  const pts = [];
   const eps = 1e-9;
-  const u0 = 0.0;
-  const u1 = Math.PI / 2 - eps;
-  const v0 = -Math.PI / 2 + eps;
-  const v1 = Math.PI / 2 - eps;
+  const u0 = 0.0, u1 = Math.PI/2 - eps;
+  const v0 = -Math.PI/2 + eps, v1 = Math.PI/2 - eps;
   const exponent = 2 / n;
-
   for (let k1 = 0; k1 < n; k1++) {
-    const ph1 = phase(k1, n);
+    const ph1 = cphase(k1, n);
     for (let k2 = 0; k2 < n; k2++) {
-      const ph2 = phase(k2, n);
+      const ph2 = cphase(k2, n);
       for (let i = 0; i <= res; i++) {
-        const u = u0 + (u1 - u0) * (i / res);
+        const u = u0 + (u1-u0)*(i/res);
         for (let j = 0; j <= res; j++) {
-          const v = v0 + (v1 - v0) * (j / res);
+          const v = v0 + (v1-v0)*(j/res);
           const xi = { re: u, im: v };
-
-          const c = cpow(ccos(xi), exponent);
-          const s = cpow(csin(xi), exponent);
-          const z1 = cmul(ph1, c);
-          const z2 = cmul(ph2, s);
+          const z1 = cmul(ph1, cpow(ccos(xi), exponent));
+          const z2 = cmul(ph2, cpow(csin(xi), exponent));
           const p = [z1.re, z1.im, z2.re, z2.im];
-
-          if (p.every(Number.isFinite)) {
-            points.push(p);
-          }
+          if (p.every(Number.isFinite)) pts.push(p);
         }
       }
     }
   }
+  return pts;
+}
 
+function generateClifford(nu, nv) {
+  const pts = [];
+  const r = 1 / Math.sqrt(2);
+  const twoPi = 2*Math.PI;
+  for (let i = 0; i < nu; i++) {
+    const u = twoPi*(i/nu);
+    const cu = r*Math.cos(u), su = r*Math.sin(u);
+    for (let j = 0; j < nv; j++) {
+      const v = twoPi*(j/nv);
+      pts.push([cu, su, r*Math.cos(v), r*Math.sin(v)]);
+    }
+  }
+  return pts;
+}
+
+function generateHypercube(dim, steps) {
+  const pts = [];
+  const step = 1.0 / (steps - 1);
+  const total = Math.pow(steps, dim);
+  for (let idx = 0; idx < total; idx++) {
+    const p = [];
+    let rem = idx;
+    for (let d = 0; d < dim; d++) {
+      p.push((rem % steps) * step);
+      rem = Math.floor(rem / steps);
+    }
+    pts.push(p);
+  }
+  return pts;
+}
+
+function generateSphere(dim, samples, seed) {
+  const rng = mulberry32(seed + 101);
+  const pts = [];
+  for (let s = 0; s < samples; s++) {
+    const v = [];
+    for (let d = 0; d < dim; d++) v.push(gauss(rng));
+    const n = norm(v);
+    if (n > 1e-12) pts.push(v.map(x => x / n));
+  }
+  return pts;
+}
+
+function generateDomain(dim, samples, seed) {
+  const rng = mulberry32(seed + 202);
+  const pts = [];
+  for (let s = 0; s < samples; s++) {
+    const v = [];
+    for (let d = 0; d < dim; d++) v.push(rng()*2 - 1);
+    pts.push(v);
+  }
+  return pts;
+}
+
+function getObjectDim() {
+  const t = controls.objType.value;
+  if (t === 'hypercube') return 6;
+  if (t === 'domain') return 11;
+  return 4;
+}
+
+function objectNote(type, deg, res) {
+  if (type === 'cy-patch') {
+    return 'Fermat patch z1^' + deg + ' + z2^' + deg + ' = 1. Patches: ' + (deg*deg) + '. Real 2D surface in R^4. Not a full CY threefold. Reference quintic CY3: h11=1, h21=101, chi=-200.';
+  }
+  if (type === 'clifford-torus') {
+    return 'Clifford torus S^1 x S^1 in R^4. With r=1/sqrt(2) it lies on S^3. Grid: ' + (res+8) + ' x ' + (res+8) + '.';
+  }
+  if (type === 'hypercube') {
+    return 'Discrete hypercube grid in [0,1]^6. Steps are capped for responsiveness. Projection hides adjacency and metric information.';
+  }
+  if (type === 'sphere') {
+    return 'Sampled unit 4-sphere S^3 in R^4. Each point has norm approximately 1.';
+  }
+  return 'Uniform random domain in [-1,1]^11. Baseline high-dimensional sampling, not a manifold.';
+}
+
+function generate() {
+  const type = controls.objType.value;
+  const deg = Number(controls.degree.value);
+  const res = Number(controls.resolution.value);
+  if (type === 'cy-patch') points = generateCyPatch(deg, Math.min(res, 18));
+  else if (type === 'clifford-torus') points = generateClifford(res + 8, res + 8);
+  else if (type === 'hypercube') points = generateHypercube(6, Math.min(4, Math.max(2, Math.round(res / 8) + 2)));
+  else if (type === 'sphere') points = generateSphere(4, Math.min(4096, res * res), SEED);
+  else if (type === 'domain') points = generateDomain(11, Math.min(4096, res * res), SEED);
+  else points = [];
+  currentBasis = makeBasis(getObjectDim(), SEED);
+  $('objectNote').textContent = objectNote(type, deg, res);
   updateLabels();
   updateInfo();
 }
-
-function rotate4(p, a, b) {
-  const [x, y, z, w] = p;
-
-  const ca = Math.cos(a);
-  const sa = Math.sin(a);
-  const x1 = x * ca - z * sa;
-  const z1 = x * sa + z * ca;
-
-  const cb = Math.cos(b);
-  const sb = Math.sin(b);
-  const y1 = y * cb - w * sb;
-  const w1 = y * sb + w * cb;
-
-  return [x1, y1, z1, w1];
+function rotatePair(q, i, j, ang) {
+  if (i >= q.length || j >= q.length) return;
+  const c = Math.cos(ang), s = Math.sin(ang);
+  const x = q[i], y = q[j];
+  q[i] = x*c - y*s;
+  q[j] = x*s + y*c;
 }
 
-function colorValue(r) {
+function animatePoint(p) {
+  const q = p.slice();
+  rotatePair(q, 0, 1, alpha);
+  rotatePair(q, 2, 3, beta);
+  if (q.length > 4) rotatePair(q, 4, 5, alpha * 0.7);
+  if (q.length > 6) rotatePair(q, 6, 7, beta * 0.7);
+  if (q.length > 8) rotatePair(q, 8, 9, alpha * 0.45);
+  if (q.length > 10) rotatePair(q, 10, 0, beta * 0.35);
+  return q;
+}
+
+function colorValue(q) {
   const mode = controls.colorBy.value;
-  if (mode === 'z') return r[2];
-  if (mode === 'radius') return Math.hypot(r[0], r[1], r[2], r[3]);
-  return r[3];
+  if (mode === 'radius') return norm(q);
+  if (mode === 'coord2' && q.length > 2) return q[2];
+  return q[q.length - 1];
 }
 
 function draw() {
-  const W = canvas.width;
-  const H = canvas.height;
-  const margin = 40;
-
+  const W = canvas.width, H = canvas.height, margin = 40;
   ctx.fillStyle = '#07090d';
   ctx.fillRect(0, 0, W, H);
-
-  if (!points.length) return;
+  if (points.length === 0 || currentBasis.length < 2) return;
 
   const projected = [];
-  let minX = Infinity, maxX = -Infinity;
-  let minY = Infinity, maxY = -Infinity;
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
   let minV = Infinity, maxV = -Infinity;
 
   for (const p of points) {
-    const r = rotate4(p, alpha, beta);
-    const x = r[0];
-    const y = r[1];
-    const v = colorValue(r);
-
-    projected.push([x, y, v]);
-
-    if (x < minX) minX = x;
-    if (x > maxX) maxX = x;
-    if (y < minY) minY = y;
-    if (y > maxY) maxY = y;
+    const q = animatePoint(p);
+    const y0 = dot(q, currentBasis[0]);
+    const y1 = dot(q, currentBasis[1]);
+    const v = colorValue(q);
+    projected.push([y0, y1, v]);
+    if (y0 < minX) minX = y0;
+    if (y0 > maxX) maxX = y0;
+    if (y1 < minY) minY = y1;
+    if (y1 > maxY) maxY = y1;
     if (v < minV) minV = v;
     if (v > maxV) maxV = v;
   }
 
+  legendRange = { min: minV, max: maxV };
+  updateLegend();
+
   const rangeX = (maxX - minX) || 1;
   const rangeY = (maxY - minY) || 1;
   const rangeV = (maxV - minV) || 1;
-
-  const scale = Math.min((W - 2 * margin) / rangeX, (H - 2 * margin) / rangeY);
-  const offX = ((W - 2 * margin) - rangeX * scale) / 2;
-  const offY = ((H - 2 * margin) - rangeY * scale) / 2;
+  const scale = Math.min((W - 2*margin)/rangeX, (H - 2*margin)/rangeY);
+  const offX = ((W - 2*margin) - rangeX*scale)/2;
+  const offY = ((H - 2*margin) - rangeY*scale)/2;
   const size = Number(controls.size.value);
 
   ctx.globalAlpha = 0.75;
-
   for (const [x, y, v] of projected) {
-    const sx = margin + offX + (x - minX) * scale;
-    const sy = H - margin - offY - (y - minY) * scale;
-    const t = (v - minV) / rangeV;
-    const hue = (0.65 - 0.65 * t) * 360;
-
-    ctx.fillStyle = `hsl(${hue}, 85%, 55%)`;
-    ctx.fillRect(sx - size / 2, sy - size / 2, size, size);
+    const sx = margin + offX + (x - minX)*scale;
+    const sy = H - margin - offY - (y - minY)*scale;
+    const t = (v - minV)/rangeV;
+    const hue = (0.65 - 0.65*t)*360;
+    ctx.fillStyle = 'hsl(' + hue + ', 85%, 55%)';
+    ctx.fillRect(sx - size/2, sy - size/2, size, size);
   }
-
   ctx.globalAlpha = 1;
+}
+
+function updateLegend() {
+  $('legendMin').textContent = legendRange.min.toFixed(3);
+  $('legendMax').textContent = legendRange.max.toFixed(3);
 }
 
 function updateLabels() {
@@ -235,19 +390,32 @@ function updateLabels() {
 }
 
 function updateInfo() {
+  const type = controls.objType.value;
+  const dim = getObjectDim();
   $('info').textContent =
-    `points: ${points.length}\n` +
-    `degree: ${controls.degree.value}\n` +
-    `resolution: ${controls.resolution.value}\n` +
-    `alpha: ${alpha.toFixed(4)}\n` +
-    `beta: ${beta.toFixed(4)}\n\n` +
-    `Educational projection only.\n` +
-    `Not a full Calabi-Yau threefold.\n` +
-    `No external dependencies.`;
+    'object: ' + type + '\n' +
+    'original dim: R^' + dim + '\n' +
+    'projected dim: R^2\n' +
+    'hidden coords: ' + (dim - 2) + '\n' +
+    'points: ' + points.length + '\n' +
+    'degree: ' + controls.degree.value + '\n' +
+    'resolution: ' + controls.resolution.value + '\n' +
+    'alpha: ' + alpha.toFixed(4) + '\n' +
+    'beta: ' + beta.toFixed(4) + '\n' +
+    'color encodes: ' + controls.colorBy.value + '\n' +
+    'basis seed: ' + SEED + '\n\n' +
+    'Exact topology reference (Python module):\n' +
+    'quintic CP4: h11=1 h21=101 chi=-200\n' +
+    'K3 quartic: h20=1 h11=20 chi=24\n' +
+    'elliptic cubic: h10=1 chi=0\n' +
+    'cubic surface: not CY h11=7 chi=9\n\n' +
+    'Educational projection only.\n' +
+    'Not a full Calabi-Yau threefold.\n' +
+    'No external dependencies.';
 }
 
 function tick() {
-  if (running) {
+  if (running === true) {
     const sp = Number(controls.speed.value);
     alpha += 0.0008 * sp;
     beta += 0.00049 * sp;
@@ -257,19 +425,16 @@ function tick() {
   requestAnimationFrame(tick);
 }
 
+controls.objType.addEventListener('change', generate);
 ['degree', 'resolution'].forEach((id) => {
-  controls[id].addEventListener('input', () => {
-    updateLabels();
-    generate();
-  });
+  controls[id].addEventListener('input', generate);
 });
-
 ['speed', 'size'].forEach((id) => {
   controls[id].addEventListener('input', updateLabels);
 });
-
+controls.colorBy.addEventListener('change', updateInfo);
 $('regen').addEventListener('click', generate);
-$('pause').addEventListener('click', () => { running = !running; });
+$('pause').addEventListener('click', () => { running = (running === false); });
 $('png').addEventListener('click', () => {
   const a = document.createElement('a');
   a.download = 'calabi-yau-projection.png';

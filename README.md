@@ -3,6 +3,8 @@
 
 ![CI](https://github.com/amurlaniakea/calabi-yau-projection-lab/actions/workflows/ci.yml/badge.svg)
 
+**Live Demo:** [amurlaniakea.github.io/calabi-yau-projection-lab](https://amurlaniakea.github.io/calabi-yau-projection-lab/)
+
 ![Calabi–Yau-like projection preview](docs/assets/cy_patch_preview.svg)
 
 ![6D hypercube projection preview](docs/assets/cube6d_preview.svg)

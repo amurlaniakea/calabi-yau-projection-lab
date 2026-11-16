@@ -10,6 +10,7 @@ from typing import List, Optional, Sequence
 from .basis import orthonormal_basis
 from .manifolds import (
     sample_calabi_yau_like_patch,
+    sample_clifford_torus,
     sample_flat_torus,
     sample_hypercube,
     sample_nd_sphere,
@@ -189,6 +190,21 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             a.dim,
             "slice_grid",
             {"steps": a.steps, "fixed": a.fixed},
+        )
+    )
+
+    p = subs.add_parser("clifford-torus", help="Clifford torus in R^4")
+    _add_common(p)
+    p.add_argument("--samples-u", type=int, default=64)
+    p.add_argument("--samples-v", type=int, default=64)
+    p.add_argument("--torus-radius", type=float, default=1.0 / math.sqrt(2.0))
+    p.set_defaults(
+        func=lambda a: _finish(
+            a,
+            sample_clifford_torus(a.samples_u, a.samples_v, a.torus_radius),
+            4,
+            "clifford_torus",
+            {"samples_u": a.samples_u, "samples_v": a.samples_v, "radius": a.radius},
         )
     )
 

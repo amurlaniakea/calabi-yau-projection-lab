@@ -1,0 +1,13 @@
+{
+  "basis_seed": 5,
+  "color_by": "auto",
+  "dim": 4,
+  "object": "clifford_torus",
+  "output": "examples/clifford_torus_seed5.svg",
+  "points": 2304,
+  "radius": 2.0,
+  "samples_u": 48,
+  "samples_v": 48,
+  "seed": 5,
+  "svg_sha256": "536fd0c9ed0ecf22ec5a05fadbe4513a640e1c5301a2bdd9db6c24621519283e"
+}

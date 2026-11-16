@@ -19,6 +19,7 @@ from .manifolds import (
 from .project import project_points
 from .render_svg import render_scatter_svg, sha256_text
 from .slices import parse_fixed, sample_slice_grid
+from .topology import classify_fermat
 
 
 def _write_text(path: str, text: str) -> None:
@@ -208,9 +209,24 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         )
     )
 
+    p = subs.add_parser("topology", help="Exact Hodge numbers for Fermat hypersurfaces")
+    p.add_argument("--degree", type=int, required=True)
+    p.add_argument("--ambient", type=int, required=True)
+    p.add_argument("--out", default=None, help="Optional JSON output path")
+    p.set_defaults(func=lambda a: _topology_cmd(a))
+
     args = parser.parse_args(argv)
     args.func(args)
     return 0
+
+
+def _topology_cmd(args) -> None:
+    result = classify_fermat(args.degree, args.ambient)
+    payload = json.dumps(result, indent=2, sort_keys=True) + "\n"
+    if args.out:
+        _write_text(args.out, payload)
+        print(f"Wrote {args.out}")
+    print(payload)
 
 
 if __name__ == "__main__":

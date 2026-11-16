@@ -16,6 +16,12 @@ from projection_lab.manifolds import (
 from projection_lab.project import project_point, project_points
 from projection_lab.render_svg import render_scatter_svg, sha256_text
 from projection_lab.slices import parse_fixed, sample_slice_grid
+from projection_lab.topology import (
+    classify_fermat,
+    euler_characteristic,
+    hodge_numbers_fermat,
+    is_calabi_yau,
+)
 
 
 class TestLinalg(unittest.TestCase):
@@ -158,6 +164,40 @@ class TestCliffordTorus(unittest.TestCase):
     def test_invalid_samples(self):
         with self.assertRaises(ValueError):
             sample_clifford_torus(1, 4)
+
+
+class TestTopology(unittest.TestCase):
+    def test_quintic(self):
+        h = hodge_numbers_fermat(5, 4)
+        self.assertEqual(h['h11'], 1)
+        self.assertEqual(h['h21'], 101)
+        self.assertEqual(euler_characteristic(h), -200)
+        self.assertTrue(is_calabi_yau(5, 4))
+
+    def test_k3(self):
+        h = hodge_numbers_fermat(4, 3)
+        self.assertEqual(h['h20'], 1)
+        self.assertEqual(h['h11'], 20)
+        self.assertEqual(euler_characteristic(h), 24)
+
+    def test_elliptic(self):
+        h = hodge_numbers_fermat(3, 2)
+        self.assertEqual(h['h10'], 1)
+        self.assertEqual(euler_characteristic(h), 0)
+
+    def test_cubic_not_cy(self):
+        self.assertFalse(is_calabi_yau(3, 3))
+        self.assertEqual(hodge_numbers_fermat(3, 3)['h11'], 7)
+
+    def test_unsupported(self):
+        with self.assertRaises(ValueError):
+            hodge_numbers_fermat(7, 5)
+
+    def test_classify(self):
+        r = classify_fermat(5, 4)
+        self.assertTrue(r['is_calabi_yau'])
+        self.assertEqual(r['real_dim'], 6)
+        self.assertEqual(r['euler_characteristic'], -200)
 
 
 if __name__ == "__main__":

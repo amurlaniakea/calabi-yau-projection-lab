@@ -8,6 +8,7 @@ from projection_lab.basis import orthonormal_basis
 from projection_lab.linalg import dot, gram_schmidt, is_orthonormal, norm, normalize
 from projection_lab.manifolds import (
     sample_calabi_yau_like_patch,
+    sample_clifford_torus,
     sample_hypercube,
     sample_nd_sphere,
     sample_random_domain,
@@ -135,6 +136,28 @@ class TestRender(unittest.TestCase):
         svg2 = render_scatter_svg(proj, vals, metadata={"seed": 7})
 
         self.assertEqual(sha256_text(svg1), sha256_text(svg2))
+
+
+class TestCliffordTorus(unittest.TestCase):
+    def test_dimension_and_finiteness(self):
+        pts = sample_clifford_torus(8, 9, radius=1.0 / math.sqrt(2.0))
+        self.assertEqual(len(pts), 72)
+        for pt in pts:
+            self.assertEqual(len(pt), 4)
+            self.assertTrue(all(math.isfinite(x) for x in pt))
+
+    def test_on_unit_sphere_when_default_radius(self):
+        pts = sample_clifford_torus(5, 6)
+        for pt in pts:
+            self.assertAlmostEqual(norm(pt), 1.0, places=10)
+
+    def test_invalid_radius(self):
+        with self.assertRaises(ValueError):
+            sample_clifford_torus(4, 4, radius=0.0)
+
+    def test_invalid_samples(self):
+        with self.assertRaises(ValueError):
+            sample_clifford_torus(1, 4)
 
 
 if __name__ == "__main__":

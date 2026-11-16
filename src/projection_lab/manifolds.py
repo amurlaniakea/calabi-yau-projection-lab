@@ -120,3 +120,55 @@ def point_dimension(points: Sequence[Sequence[float]]) -> int:
     if not points:
         raise ValueError("Empty point cloud")
     return len(points[0])
+
+def sample_clifford_torus(
+    samples_u: int = 64,
+    samples_v: int = 64,
+    radius: float = 1.0 / math.sqrt(2.0),
+) -> List[Vector]:
+    """Sample a Clifford torus embedded in R^4.
+
+    For radius = 1/sqrt(2), the torus lies on the unit 3-sphere S^3:
+
+        (r cos u, r sin u, r cos v, r sin v)
+
+    with u, v in [0, 2pi).
+
+    This is an educational smooth 2D surface in 4D,
+    not a Calabi-Yau threefold.
+    """
+    if samples_u < 2 or samples_v < 2:
+        raise ValueError("samples_u and samples_v must be >= 2")
+
+    if samples_u > MAX_POINTS or samples_v > MAX_POINTS:
+        raise ValueError(
+            f"samples_u and samples_v must be <= {MAX_POINTS}"
+        )
+
+    total = samples_u * samples_v
+    _check_total(total)
+
+    rf = float(radius)
+    if not math.isfinite(rf) or rf <= 0.0:
+        raise ValueError("radius must be finite and > 0")
+
+    points: List[Vector] = []
+    two_pi = 2.0 * math.pi
+
+    for i in range(samples_u):
+        u = two_pi * (i / samples_u)
+        cu = rf * math.cos(u)
+        su = rf * math.sin(u)
+
+        for j in range(samples_v):
+            v = two_pi * (j / samples_v)
+            pt = [cu, su, rf * math.cos(v), rf * math.sin(v)]
+
+            if _finite_point(pt, 1e6):
+                points.append(pt)
+
+    if not points:
+        raise RuntimeError("Generated no finite points")
+
+    return points
+

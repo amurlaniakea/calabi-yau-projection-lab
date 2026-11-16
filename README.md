@@ -1,6 +1,8 @@
 
 # Calabi–Yau Projection Lab
 
+![CI](https://github.com/amurlaniakea/calabi-yau-projection-lab/actions/workflows/ci.yml/badge.svg)
+
 «Tecnósfera al servicio de la Biósfera.»  
 «La Paz Es El Camino.»
 

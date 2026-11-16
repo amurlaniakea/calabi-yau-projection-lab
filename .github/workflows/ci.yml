@@ -1,0 +1,17 @@
+
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: PYTHONPATH=src python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - run: PYTHONPATH=src python3 -m projection_lab.cli cube --dim 6 --steps 3 --seed 1 --out /tmp/cube.svg

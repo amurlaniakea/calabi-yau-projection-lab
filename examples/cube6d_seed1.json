@@ -1,0 +1,11 @@
+{
+  "basis_seed": 1,
+  "color_by": "auto",
+  "dim": 6,
+  "object": "hypercube",
+  "output": "examples/cube6d_seed1.svg",
+  "points": 4096,
+  "seed": 1,
+  "steps": 4,
+  "svg_sha256": "0ae1168f3bf45e5ad78b46702ef6c5aea63d43a43fb1af5959528c8f219e685d"
+}

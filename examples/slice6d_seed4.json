@@ -1,0 +1,12 @@
+{
+  "basis_seed": 4,
+  "color_by": "auto",
+  "dim": 6,
+  "fixed": "3=0.25,4=0.75",
+  "object": "slice_grid",
+  "output": "examples/slice6d_seed4.svg",
+  "points": 1296,
+  "seed": 4,
+  "steps": 6,
+  "svg_sha256": "8a8a1763ca1274a355305574195028ade4485085cbcc33fb68196fa49c3aaa13"
+}

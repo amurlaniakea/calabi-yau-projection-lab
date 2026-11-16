@@ -1,0 +1,11 @@
+{
+  "basis_seed": 2,
+  "color_by": "auto",
+  "dim": 11,
+  "object": "random_domain",
+  "output": "examples/domain11d_seed2.svg",
+  "points": 2500,
+  "samples": 2500,
+  "seed": 2,
+  "svg_sha256": "60ae39943e5a06c5fd2b013e8861dd15abb3e06e09f2587143766f3661ede770"
+}

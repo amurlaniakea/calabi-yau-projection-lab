@@ -1,0 +1,12 @@
+{
+  "basis_seed": 3,
+  "color_by": "auto",
+  "degree": 5,
+  "dim": 4,
+  "object": "calabi_yau_like_patch",
+  "output": "examples/cy_patch_d5_r14.svg",
+  "points": 5625,
+  "resolution": 14,
+  "seed": 3,
+  "svg_sha256": "d00f165cb40e7a5407729d19b6d879813c59a4ec0a626aa3f2c8263850263221"
+}

@@ -54,35 +54,37 @@ For students: the key lesson is that a 2D image of a 6D/11D object is a shadow, 
 
 ## Architecture
 
-    calabi-yau-projection-lab/
-    ├── src/projection_lab/
-    │   ├── linalg.py          # dot, norm, Gram-Schmidt
-    │   ├── basis.py           # deterministic orthonormal bases
-    │   ├── project.py         # R^n -> R^2 projection
-    │   ├── manifolds.py       # hypercube, torus, sphere, CY-like patch, Clifford torus, quintic chart
-    │   ├── slices.py          # fixed-coordinate slices
-    │   ├── topology.py        # exact Fermat Hodge numbers and Euler characteristic
-    │   ├── render_svg.py      # reproducible SVG renderer
-    │   └── cli.py             # command line interface
-    ├── tests/
-    │   └── test_core.py       # 35 tests as evidence
-    ├── docs/
-    │   ├── index.html         # zero-dependency interactive demo
-    │   ├── 00-sdd.md          # Software Design Document
-    │   ├── 01-limitations.md  # explicit non-goals and limits
-    │   ├── 02-pedagogy.md     # classroom guide
-    │   ├── 03-research-and-professional-use.md
-    │   ├── 04-object-gallery.md
-    │   ├── 05-physics-roadmap.md
-    │   ├── 06-degree-and-patches.md
-    │   ├── 07-equations-and-psm.md
-    │   ├── 08-classroom-lab-sheet.md
+```text
+calabi-yau-projection-lab/
+├── src/projection_lab/
+│   ├── linalg.py          # dot, norm, Gram-Schmidt
+│   ├── basis.py           # deterministic orthonormal bases
+│   ├── project.py         # R^n -> R^2 projection
+│   ├── manifolds.py       # hypercube, torus, sphere, CY-like patch, Clifford torus, quintic chart
+│   ├── slices.py          # fixed-coordinate slices
+│   ├── topology.py        # exact Fermat Hodge numbers and Euler characteristic
+│   ├── render_svg.py      # reproducible SVG renderer
+│   └── cli.py             # command line interface
+├── tests/
+│   └── test_core.py       # 35 tests as evidence
+├── docs/
+│   ├── index.html         # zero-dependency interactive demo with object selector, quintic branch explorer and MathML equations
+│   ├── 00-sdd.md          # Software Design Document
+│   ├── 01-limitations.md  # explicit non-goals and limits
+│   ├── 02-pedagogy.md     # classroom guide
+│   ├── 03-research-and-professional-use.md
+│   ├── 04-object-gallery.md
+│   ├── 05-physics-roadmap.md
+│   ├── 06-degree-and-patches.md
+│   ├── 07-equations-and-psm.md
+│   ├── 08-classroom-lab-sheet.md
 │   ├── 09-quintic-threefold-chart.md
-    │   └── assets/            # SVG previews for README
-    ├── examples/              # generated SVG + JSON metadata
-    ├── Makefile
-    ├── LICENSE                # AGPL-3.0-or-later
-    └── .github/workflows/ci.yml
+│   └── assets/            # SVG previews for README
+├── examples/              # generated SVG + JSON metadata
+├── Makefile
+├── LICENSE                # AGPL-3.0-or-later
+└── .github/workflows/ci.yml
+```
 
 ## Quickstart
 

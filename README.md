@@ -116,19 +116,28 @@ Open the interactive demo:
 
 ## CLI examples
 
-    PYTHONPATH=src python3 -m projection_lab.cli cube --dim 6 --steps 4 --seed 1 --out examples/cube6d.svg
+```bash
+# 6D hypercube projection
+PYTHONPATH=src python3 -m projection_lab.cli cube --dim 6 --steps 4 --seed 1 --out examples/cube6d.svg
 
-    PYTHONPATH=src python3 -m projection_lab.cli domain --dim 11 --samples 2500 --seed 2 --out examples/domain11d.svg
+# 11D random domain projection
+PYTHONPATH=src python3 -m projection_lab.cli domain --dim 11 --samples 2500 --seed 2 --out examples/domain11d.svg
 
-    PYTHONPATH=src python3 -m projection_lab.cli cy-patch --degree 5 --resolution 14 --seed 3 --out examples/cy_patch.svg
+# Calabi-Yau-like Fermat patch in R^4
+PYTHONPATH=src python3 -m projection_lab.cli cy-patch --degree 5 --resolution 14 --seed 3 --out examples/cy_patch.svg
 
-    PYTHONPATH=src python3 -m projection_lab.cli clifford-torus --samples-u 48 --samples-v 48 --seed 5 --out examples/clifford_torus.svg
+# Clifford torus in R^4
+PYTHONPATH=src python3 -m projection_lab.cli clifford-torus --samples-u 48 --samples-v 48 --seed 5 --out examples/clifford_torus.svg
 
-    PYTHONPATH=src python3 -m projection_lab.cli slice --dim 6 --steps 6 --fixed 3=0.25,4=0.75 --seed 4 --out examples/slice6d.svg
+# 6D slice with frozen coordinates
+PYTHONPATH=src python3 -m projection_lab.cli slice --dim 6 --steps 6 --fixed 3=0.25,4=0.75 --seed 4 --out examples/slice6d.svg
 
-    PYTHONPATH=src python3 -m projection_lab.cli topology --degree 5 --ambient 4 --out examples/topology_quintic.json
+# Exact Fermat topology: quintic in CP^4
+PYTHONPATH=src python3 -m projection_lab.cli topology --degree 5 --ambient 4 --out examples/topology_quintic.json
 
+# Quintic threefold affine chart in R^8
 PYTHONPATH=src python3 -m projection_lab.cli quintic-chart --grid 4 --branch 0 --seed 6 --out examples/quintic_chart_g4_b0.svg
+```
 
 ## Reproducibility contract
 

@@ -1,17 +1,17 @@
 # Calabi–Yau Projection Lab
 
 ![CI](https://github.com/amurlaniakea/calabi-yau-projection-lab/actions/workflows/ci.yml/badge.svg)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24297864.svg)](https://doi.org/10.5281/zenodo.24297864)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24297863.svg)](https://doi.org/10.5281/zenodo.24297863)
 
 **Live Demo:** [amurlaniakea.github.io/calabi-yau-projection-lab](https://amurlaniakea.github.io/calabi-yau-projection-lab/)
 
 **Static Branch Gallery:** [amurlaniakea.github.io/calabi-yau-projection-lab/quintic-branch-gallery.html](https://amurlaniakea.github.io/calabi-yau-projection-lab/quintic-branch-gallery.html)
 
-![Quintic CY3 affine chart branch 0](docs/assets/quintic_branch0_preview.svg)
+![Calabi-Yau Projection Lab preview 1](docs/assets/readme_projection_1.png)
 
-![Quintic CY3 affine chart branch 4](docs/assets/quintic_branch4_preview.svg)
+![Calabi-Yau Projection Lab preview 2](docs/assets/readme_projection_2.png)
 
-*Two local sheets of the quintic Calabi-Yau threefold affine chart, same camera, different complex fifth-root branch.*
+*Visual previews of the projection lab.*
 
 «Tecnósfera al servicio de la Biósfera.»
 «La Paz Es El Camino.»
@@ -201,12 +201,13 @@ In short:
 
 Please cite this repository using the metadata in `CITATION.cff`.
 
-DOI: [10.5281/zenodo.24297864](https://doi.org/10.5281/zenodo.24297864)
+Concept DOI (all versions): [10.5281/zenodo.24297863](https://doi.org/10.5281/zenodo.24297863)
+
+Version DOI (v0.5.0): [10.5281/zenodo.24297864](https://doi.org/10.5281/zenodo.24297864)
 
 Suggested citation:
 
-> Sordo Martínez, Pedro. (2026). Calabi–Yau Projection Lab [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.24297864
-
+> Sordo Martínez, Pedro. (2026). Calabi–Yau Projection Lab [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.24297863
 
 ## License
 

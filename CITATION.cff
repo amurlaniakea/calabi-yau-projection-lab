@@ -8,8 +8,8 @@ authors:
 version: "0.5.0"
 date-released: 2026-11-17
 repository-code: "https://github.com/amurlaniakea/calabi-yau-projection-lab"
-repository-artifact: "https://doi.org/10.5281/zenodo.24297864"
-doi: "10.5281/zenodo.24297864"
+repository-artifact: "https://doi.org/10.5281/zenodo.24297863"
+doi: "10.5281/zenodo.24297863"
 license: "AGPL-3.0-or-later"
 abstract: >
   Zero-dependency educational laboratory for projecting, slicing and

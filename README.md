@@ -196,7 +196,7 @@ Incluye:
 
 - núcleo matemático en Python sin dependencias externas;
 - render SVG reproducible con SHA-256;
-- 30 tests como evidencia;
+- 35 tests como evidencia;
 - demo local HTML/Canvas sin CDN con selector de objeto, seed de cámara, leyenda de color y ecuaciones MathML nativas;
 - documentación pedagógica, galería de objetos, roadmap físico, ficha de laboratorio universitaria;
 - licencia AGPL-3.0-or-later.

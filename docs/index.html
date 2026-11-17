@@ -30,11 +30,47 @@ summary { cursor:pointer; color:#9fb0c0; font-size:12px; }
 .eq h3 { margin:0 0 6px; font-size:13px; color:#d8e1ea; }
 .eq p { margin:4px 0 0; font-size:12px; color:#9fb0c0; }
 math { display:block; margin:6px 0; color:#e8f0f8; font-size:1.05em; overflow-x:auto; }
+.gallery-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:10px; margin-top:8px; }
+.gallery-cell { border:1px solid #1e2633; border-radius:6px; padding:8px; background:#07090d; }
+.gallery-cell h3 { margin:0 0 6px; font-size:13px; color:#d8e1ea; }
+.gallery-cell canvas { width:100%; height:auto; background:#07090d; border:1px solid #18202b; border-radius:4px; }
+.gallery-cell pre { font-size:11px; margin:6px 0 0; color:#9fb0c0; min-height:36px; white-space:pre-wrap; }
 .notice { font-size:12px; color:#8a98a8; border-top:1px solid #1e2633; padding-top:10px; }
 footer { padding:12px 20px; border-top:1px solid #1e2633; font-size:12px; color:#8a98a8; }
 footer a { color:#7fd1ff; text-decoration:none; }
 footer a:hover { text-decoration:underline; }
+.gallery-link { display:block; padding:8px; background:#0d1520; color:#7fd1ff; border:1px solid #263b5f; border-radius:6px; text-decoration:none; font-size:12px; text-align:center; }
+.gallery-link:hover { background:#152033; text-decoration:underline; }
 @media (max-width: 980px) { main { grid-template-columns: 1fr; } }
+
+.gallery-nav-inline {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin:0 0 10px;
+  padding:8px 10px;
+  border:1px solid #263b5f;
+  border-radius:6px;
+  background:#0d1520;
+}
+.gallery-nav-inline button {
+  width:auto;
+  padding:7px 10px;
+}
+.gallery-caption {
+  font-size:12px;
+  color:#9fb0c0;
+}
+@media (max-width: 700px) {
+  .gallery-nav-inline {
+    flex-direction:column;
+    align-items:stretch;
+  }
+  .gallery-nav-inline button {
+    width:100%;
+  }
+}
 </style>
 </head>
 <body>
@@ -46,6 +82,25 @@ footer a:hover { text-decoration:underline; }
 <main>
 <section class="stage">
 <canvas id="view" width="960" height="720"></canvas>
+<section id="gallerySection" style="display:none">
+
+<div class="gallery-nav-inline" translate="no">
+  <button id="galleryTopClose">← Back to live demo / Volver a la demo</button>
+  <span class="gallery-caption">Quintic branch gallery: five local sheets, same camera</span>
+</div>
+
+<div class="gallery-grid">
+<div class="gallery-cell"><h3>Branch 0</h3><canvas id="gc0" width="300" height="225"></canvas><pre id="gs0"></pre></div>
+<div class="gallery-cell"><h3>Branch 1</h3><canvas id="gc1" width="300" height="225"></canvas><pre id="gs1"></pre></div>
+<div class="gallery-cell"><h3>Branch 2</h3><canvas id="gc2" width="300" height="225"></canvas><pre id="gs2"></pre></div>
+<div class="gallery-cell"><h3>Branch 3</h3><canvas id="gc3" width="300" height="225"></canvas><pre id="gs3"></pre></div>
+<div class="gallery-cell"><h3>Branch 4</h3><canvas id="gc4" width="300" height="225"></canvas><pre id="gs4"></pre></div>
+</div>
+<div style="display:flex;gap:8px;margin-top:10px">
+<button id="galleryClose">← Back to live demo / Volver a la demo</button>
+<button id="galleryPng">Export gallery PNG</button>
+</div>
+</section>
 <details>
 <summary>Render data / Datos del renderizado</summary>
 <pre id="info"></pre>
@@ -119,6 +174,8 @@ footer a:hover { text-decoration:underline; }
 <button id="regen">Regenerate (next seed)</button>
 <button id="pause">Pause / Play</button>
 <button id="png">Export PNG</button>
+<a href="quintic-branch-gallery.html" class="gallery-link">Static branch gallery (5 sheets)</a>
+<button id="branchGallery">Branch gallery (5 sheets)</button>
 <div class="legend" id="legend"></div>
 <div class="legend-labels"><span id="legendMin">min</span><span id="legendMax">max</span></div>
 <div class="note" id="objectNote"></div>
@@ -524,6 +581,101 @@ function tick() {
   requestAnimationFrame(tick);
 }
 
+
+function renderMini(cvs, ctx2, pts, basis, a, b, sz) {
+  const W = cvs.width, H = cvs.height, mg = 10;
+  ctx2.fillStyle = '#07090d';
+  ctx2.fillRect(0, 0, W, H);
+  if (pts.length === 0 || basis.length < 2) return;
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  let minV = Infinity, maxV = -Infinity;
+  const proj = [];
+  for (const p of pts) {
+    const q = p.slice();
+    rotatePair(q, 0, 1, a);
+    rotatePair(q, 2, 3, b);
+    if (q.length > 4) rotatePair(q, 4, 5, a * 0.7);
+    if (q.length > 6) rotatePair(q, 6, 7, b * 0.7);
+    const y0 = dot(q, basis[0]);
+    const y1 = dot(q, basis[1]);
+    const v = norm(q);
+    proj.push([y0, y1, v]);
+    if (y0 < minX) minX = y0;
+    if (y0 > maxX) maxX = y0;
+    if (y1 < minY) minY = y1;
+    if (y1 > maxY) maxY = y1;
+    if (v < minV) minV = v;
+    if (v > maxV) maxV = v;
+  }
+  const rX = (maxX - minX) || 1;
+  const rY = (maxY - minY) || 1;
+  const rV = (maxV - minV) || 1;
+  const sc = Math.min((W - 2*mg)/rX, (H - 2*mg)/rY);
+  const oX = ((W - 2*mg) - rX*sc)/2;
+  const oY = ((H - 2*mg) - rY*sc)/2;
+  ctx2.globalAlpha = 0.75;
+  for (const [x, y, v] of proj) {
+    const sx = mg + oX + (x - minX)*sc;
+    const sy = H - mg - oY - (y - minY)*sc;
+    const t = (v - minV)/rV;
+    const hue = (0.65 - 0.65*t)*360;
+    ctx2.fillStyle = 'hsl(' + hue + ', 85%, 55%)';
+    ctx2.fillRect(sx - sz/2, sy - sz/2, sz, sz);
+  }
+  ctx2.globalAlpha = 1;
+}
+
+function showBranchGallery() {
+  const res = Number(controls.resolution.value);
+  const grid = Math.min(res, 5);
+  const sd = getSeed();
+  const basis = makeBasis(8, sd);
+  const sz = Number(controls.size.value);
+  const a = alpha, b = beta;
+  for (let br = 0; br < 5; br++) {
+    const pts = generateQuinticChart(grid, br, 1.0);
+    const cvs = document.getElementById('gc' + br);
+    const ctx2 = cvs.getContext('2d');
+    renderMini(cvs, ctx2, pts, basis, a, b, sz);
+    document.getElementById('gs' + br).textContent =
+      'points: ' + pts.length + '\n' +
+      'max residual: ' + lastQuinticStats.maxResidual.toExponential(2) + '\n' +
+      'discarded: ' + lastQuinticStats.discarded + '\n' +
+      'seed: ' + sd + ' grid: ' + grid;
+  }
+  $('gallerySection').style.display = 'block';
+  canvas.style.display = 'none';
+  running = false;
+}
+
+function hideBranchGallery() {
+  $('gallerySection').style.display = 'none';
+  canvas.style.display = 'block';
+  running = true;
+}
+
+function exportGalleryPng() {
+  const totalW = 300 * 5 + 10 * 4;
+  const totalH = 225 + 40;
+  const tmp = document.createElement('canvas');
+  tmp.width = totalW;
+  tmp.height = totalH;
+  const tctx = tmp.getContext('2d');
+  tctx.fillStyle = '#0b0e14';
+  tctx.fillRect(0, 0, totalW, totalH);
+  for (let br = 0; br < 5; br++) {
+    const src = document.getElementById('gc' + br);
+    tctx.drawImage(src, br * (300 + 10), 0, 300, 225);
+    tctx.fillStyle = '#9fb0c0';
+    tctx.font = '11px monospace';
+    tctx.fillText('Branch ' + br, br * (300 + 10) + 4, 238);
+  }
+  const a = document.createElement('a');
+  a.download = 'quintic-branch-gallery.png';
+  a.href = tmp.toDataURL('image/png');
+  a.click();
+}
+
 controls.objType.addEventListener('change', generate);
 ['degree', 'resolution'].forEach((id) => {
   controls[id].addEventListener('input', generate);
@@ -542,6 +694,10 @@ $('regen').addEventListener('click', () => {
   generate();
 });
 $('pause').addEventListener('click', () => { running = (running === false); });
+$('branchGallery').addEventListener('click', showBranchGallery);
+$('galleryClose').addEventListener('click', hideBranchGallery);
+$('galleryTopClose').addEventListener('click', hideBranchGallery);
+$('galleryPng').addEventListener('click', exportGalleryPng);
 $('png').addEventListener('click', () => {
   const a = document.createElement('a');
   a.download = 'calabi-yau-projection.png';

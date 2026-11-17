@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Calabi–Yau Projection Lab"
+authors:
+  - family-names: "Sordo Martínez"
+    given-names: "Pedro"
+    email: "amurlaniakea@gmail.com"
+version: "0.5.0"
+date-released: 2026-11-17
+repository-code: "https://github.com/amurlaniakea/calabi-yau-projection-lab"
+license: "AGPL-3.0-or-later"
+abstract: >
+  Zero-dependency educational laboratory for projecting, slicing and
+  visually encoding higher-dimensional geometric objects onto 2D planes.
+  Includes deterministic orthogonal projections, toy manifolds, Clifford
+  torus, Fermat Calabi-Yau-like patches, exact Fermat topology, a local
+  affine chart of the quintic Calabi-Yau threefold in R^8 with five
+  complex fifth-root branches, reproducible SVG/JSON outputs, a static
+  quintic branch gallery, an interactive web demo, and approximate
+  Fubini-Study induced metric diagnostics. This repository does not
+  compute Ricci-flat Calabi-Yau metrics, does not solve the complex
+  Monge-Ampere equation, and does not simulate string theory physics.
+keywords:
+  - Calabi-Yau
+  - quintic threefold
+  - mathematical visualization
+  - reproducible research
+  - zero dependencies
+  - projection
+  - Clifford torus
+  - Fermat topology
+  - Fubini-Study metric
+  - educational software

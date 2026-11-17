@@ -6,9 +6,11 @@
 
 **Static Branch Gallery:** [amurlaniakea.github.io/calabi-yau-projection-lab/quintic-branch-gallery.html](https://amurlaniakea.github.io/calabi-yau-projection-lab/quintic-branch-gallery.html)
 
-![Calabi–Yau-like projection preview](docs/assets/cy_patch_preview.svg)
+![Quintic CY3 affine chart branch 0](docs/assets/quintic_branch0_preview.svg)
 
-![6D hypercube projection preview](docs/assets/cube6d_preview.svg)
+![Quintic CY3 affine chart branch 4](docs/assets/quintic_branch4_preview.svg)
+
+*Two local sheets of the quintic Calabi-Yau threefold affine chart, same camera, different complex fifth-root branch.*
 
 «Tecnósfera al servicio de la Biósfera.»
 «La Paz Es El Camino.»
@@ -89,7 +91,7 @@ calabi-yau-projection-lab/
 │   ├── 09-quintic-threefold-chart.md
 │   ├── 10-metric-diagnostics.md
 │   ├── quintic-branch-gallery.html # static five-branch gallery
-│   └── assets/            # SVG previews for README and quintic branch gallery
+│   └── assets/            # SVG previews for README, quintic branch gallery and static pages
 ├── examples/              # generated SVG + JSON metadata
 ├── Makefile
 ├── LICENSE                # AGPL-3.0-or-later
@@ -193,6 +195,10 @@ In short:
 - No external runtime dependencies are used.
 - PSM / Donaldson / ML metric layers are documented as future sibling-repo work, not implemented here.
 - Metric diagnostics are Fubini-Study induced approximations on tangent spaces, not Ricci-flat Calabi-Yau metrics.
+
+## Citation
+
+Please cite this repository using the metadata in `CITATION.cff`. After the first Zenodo deposit, a DOI badge will be added here.
 
 ## License
 

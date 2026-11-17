@@ -30,3 +30,6 @@ quintic-gallery-previews:
 	PYTHONPATH=src python3 -m projection_lab.cli quintic-chart --grid 3 --branch 2 --seed 6 --out docs/assets/quintic_branches/branch2.svg --meta docs/assets/quintic_branches/branch2.json
 	PYTHONPATH=src python3 -m projection_lab.cli quintic-chart --grid 3 --branch 3 --seed 6 --out docs/assets/quintic_branches/branch3.svg --meta docs/assets/quintic_branches/branch3.json
 	PYTHONPATH=src python3 -m projection_lab.cli quintic-chart --grid 3 --branch 4 --seed 6 --out docs/assets/quintic_branches/branch4.svg --meta docs/assets/quintic_branches/branch4.json
+
+metric-diag:
+	PYTHONPATH=src python3 -m projection_lab.cli metric-diag --grid 3 --branch 0 --seed 6 --sample 50 --meta examples/metric_diag_quintic_g3_b0.json

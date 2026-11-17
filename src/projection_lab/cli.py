@@ -20,6 +20,11 @@ from .manifolds import (
 from .project import project_points
 from .render_svg import render_scatter_svg, sha256_text
 from .slices import parse_fixed, sample_slice_grid
+
+from .metrics import (
+    metric_diagnostics,
+    batch_diagnostics,
+)
 from .topology import classify_fermat
 
 
@@ -101,6 +106,47 @@ def _finish(args, points, dim: int, object_name: str, extra_metadata: Optional[d
 
     print(f"Wrote {args.out}")
     print(f"Points: {len(points)} Dim: {dim} SHA256: {digest}")
+
+
+
+def _metric_diag(args):
+    """Generate quintic chart points and compute metric diagnostics."""
+    import json
+    from .manifolds import sample_quintic_threefold_chart
+
+    pts = sample_quintic_threefold_chart(
+        grid=args.grid,
+        branch=args.branch,
+        radius_max=args.radius_max,
+    )
+    sample_size = min(args.sample, len(pts))
+    sample_pts = pts[:sample_size]
+
+    batch = batch_diagnostics(sample_pts)
+    per_point = []
+    for p in sample_pts[:5]:
+        per_point.append(metric_diagnostics(p))
+
+    result = {
+        "object": "quintic_threefold_chart",
+        "metric_type": "fubini-study-induced-approximation",
+        "caveat": "Not a Ricci-flat Calabi-Yau metric. Diagnostic only. No Monge-Ampere solution. No cohomology from scratch.",
+        "grid": args.grid,
+        "branch": args.branch,
+        "radius_max": args.radius_max,
+        "seed": args.seed,
+        "total_points": len(pts),
+        "sampled_points": sample_size,
+        "batch_diagnostics": batch,
+        "per_point_sample": per_point,
+    }
+
+    if args.meta:
+        with open(args.meta, 'w', encoding='utf-8') as f:
+            json.dump(result, f, indent=2, sort_keys=True)
+        print(f'Wrote {args.meta}')
+    else:
+        print(json.dumps(result, indent=2, sort_keys=True))
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -229,6 +275,17 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             "quintic_threefold_chart",
             {"grid": a.grid, "branch": a.branch, "radius_max": a.radius_max},
         )
+    )
+
+    p = subs.add_parser("metric-diag", help="Fubini-Study induced metric diagnostics on quintic chart")
+    p.add_argument("--meta", help="optional JSON metadata output path")
+    p.add_argument("--seed", type=int, default=6)
+    p.add_argument("--grid", type=int, default=3)
+    p.add_argument("--branch", type=int, default=0)
+    p.add_argument("--radius-max", type=float, default=1.0)
+    p.add_argument("--sample", type=int, default=20, help="Number of points for batch diagnostics")
+    p.set_defaults(
+        func=lambda a: _metric_diag(a)
     )
 
     args = parser.parse_args(argv)

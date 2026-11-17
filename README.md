@@ -4,6 +4,8 @@
 
 **Live Demo:** [amurlaniakea.github.io/calabi-yau-projection-lab](https://amurlaniakea.github.io/calabi-yau-projection-lab/)
 
+**Static Branch Gallery:** [amurlaniakea.github.io/calabi-yau-projection-lab/quintic-branch-gallery.html](https://amurlaniakea.github.io/calabi-yau-projection-lab/quintic-branch-gallery.html)
+
 ![Calabi–Yau-like projection preview](docs/assets/cy_patch_preview.svg)
 
 ![6D hypercube projection preview](docs/assets/cube6d_preview.svg)
@@ -30,9 +32,10 @@ A professional, zero-dependency laboratory for projecting, slicing and visually 
 - Slices with frozen coordinates.
 - Exact Fermat Hodge numbers and Euler characteristics via integer combinatorics.
 - Reproducible quintic branch gallery: five local sheets under the same camera.
+- Fubini-Study induced metric diagnostics on the quintic chart (approximation, not Ricci-flat).
 - Reproducible SVG output and SHA-256 hashes.
 - Local interactive HTML/Canvas demo, no CDN, no framework.
-- Tests as evidence (35 tests).
+- Tests as evidence (45 tests).
 
 ## Pedagogy and audience
 
@@ -47,6 +50,7 @@ This repository is intended as an open educational resource for university teach
 - [Classroom lab sheet](docs/08-classroom-lab-sheet.md)
 - [Quintic threefold chart](docs/09-quintic-threefold-chart.md)
 - [Quintic branch gallery](docs/quintic-branch-gallery.html)
+- [Metric diagnostics](docs/10-metric-diagnostics.md)
 
 For instructors: use the CLI and local demo to show projections, slices, Clifford torus, Fermat patches and hidden-coordinate encoding.
 
@@ -65,10 +69,12 @@ calabi-yau-projection-lab/
 │   ├── manifolds.py       # hypercube, torus, sphere, CY-like patch, Clifford torus, quintic chart
 │   ├── slices.py          # fixed-coordinate slices
 │   ├── topology.py        # exact Fermat Hodge numbers and Euler characteristic
+│   ├── metrics.py         # Fubini-Study induced metric diagnostics (approximation)
 │   ├── render_svg.py      # reproducible SVG renderer
 │   └── cli.py             # command line interface
 ├── tests/
-│   └── test_core.py       # 35 tests as evidence
+│   ├── test_core.py       # 35 core tests as evidence
+│   └── test_metrics.py    # 10 metric diagnostics tests as evidence
 ├── docs/
 │   ├── index.html         # zero-dependency interactive demo with object selector, quintic branch explorer and MathML equations
 │   ├── 00-sdd.md          # Software Design Document
@@ -81,6 +87,7 @@ calabi-yau-projection-lab/
 │   ├── 07-equations-and-psm.md
 │   ├── 08-classroom-lab-sheet.md
 │   ├── 09-quintic-threefold-chart.md
+│   ├── 10-metric-diagnostics.md
 │   ├── quintic-branch-gallery.html # static five-branch gallery
 │   └── assets/            # SVG previews for README and quintic branch gallery
 ├── examples/              # generated SVG + JSON metadata
@@ -109,6 +116,7 @@ Optional reproducible galleries:
 
     make quintic-gallery
     make quintic-gallery-previews
+    make metric-diag
 
 If you do not have `make`:
 
@@ -145,6 +153,8 @@ PYTHONPATH=src python3 -m projection_lab.cli topology --degree 5 --ambient 4 --o
 
 # Quintic threefold affine chart in R^8
 PYTHONPATH=src python3 -m projection_lab.cli quintic-chart --grid 4 --branch 0 --seed 6 --out examples/quintic_chart_g4_b0.svg
+
+PYTHONPATH=src python3 -m projection_lab.cli metric-diag --grid 3 --branch 0 --seed 6 --sample 50 --meta examples/metric_diag_quintic_g3_b0.json
 ```
 
 ## Reproducibility contract
@@ -182,6 +192,7 @@ In short:
 - No physics claims are made.
 - No external runtime dependencies are used.
 - PSM / Donaldson / ML metric layers are documented as future sibling-repo work, not implemented here.
+- Metric diagnostics are Fubini-Study induced approximations on tangent spaces, not Ricci-flat Calabi-Yau metrics.
 
 ## License
 

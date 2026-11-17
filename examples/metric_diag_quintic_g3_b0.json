@@ -1,0 +1,85 @@
+{
+  "batch_diagnostics": {
+    "condition_number_max": 1.8277862881805051,
+    "condition_number_mean": 1.1976407282171768,
+    "det_max": 0.011271692039008172,
+    "det_mean": 0.004467845854099543,
+    "det_min": 0.00024483615240374214,
+    "geo_mean_eigenvalue_max": 0.47351257731303686,
+    "geo_mean_eigenvalue_mean": 0.3831711507034157,
+    "geo_mean_eigenvalue_min": 0.25011856268355315,
+    "points": 50,
+    "positive_definite_count": 50,
+    "positive_definite_fraction": 1.0,
+    "symmetry_error_max": 2.7755575615628914e-17,
+    "trace_max": 2.8415991769562035,
+    "trace_mean": 2.3161971558672247,
+    "trace_min": 1.5851651577270938
+  },
+  "branch": 0,
+  "caveat": "Not a Ricci-flat Calabi-Yau metric. Diagnostic only. No Monge-Ampere solution. No cohomology from scratch.",
+  "grid": 3,
+  "metric_type": "fubini-study-induced-approximation",
+  "object": "quintic_threefold_chart",
+  "per_point_sample": [
+    {
+      "condition_number_approx": 1.0000000324624996,
+      "det": 0.011258066379503825,
+      "geo_mean_eigenvalue": 0.4734171291577227,
+      "max_diagonal": 0.47350604447750905,
+      "mean_eigenvalue": 0.4735060367919166,
+      "min_diagonal": 0.4735060291063197,
+      "positive_definite_proxy": true,
+      "symmetry_error": 3.40136667881805e-21,
+      "trace": 2.8410362207514996
+    },
+    {
+      "condition_number_approx": 1.0001876782853123,
+      "det": 0.011264876071908795,
+      "geo_mean_eigenvalue": 0.4734648432843373,
+      "max_diagonal": 0.4736121823252936,
+      "mean_eigenvalue": 0.4735529381926075,
+      "min_diagonal": 0.47352331228198913,
+      "positive_definite_proxy": true,
+      "symmetry_error": 8.673617379884035e-19,
+      "trace": 2.841317629155645
+    },
+    {
+      "condition_number_approx": 1.0001876782853125,
+      "det": 0.011264876071908778,
+      "geo_mean_eigenvalue": 0.4734648432843372,
+      "max_diagonal": 0.4736121823252935,
+      "mean_eigenvalue": 0.4735529381926074,
+      "min_diagonal": 0.47352331228198896,
+      "positive_definite_proxy": true,
+      "symmetry_error": 8.673617379884035e-19,
+      "trace": 2.8413176291556446
+    },
+    {
+      "condition_number_approx": 1.142668650787636,
+      "det": 0.004552313564923805,
+      "geo_mean_eigenvalue": 0.40710399240838724,
+      "max_diagonal": 0.4261836420872292,
+      "mean_eigenvalue": 0.4084464932092902,
+      "min_diagonal": 0.3729722013406624,
+      "positive_definite_proxy": true,
+      "symmetry_error": 3.469446951953614e-18,
+      "trace": 2.4506789592557414
+    },
+    {
+      "condition_number_approx": 1.0939202069867577,
+      "det": 0.005221024590341972,
+      "geo_mean_eigenvalue": 0.4165105021505992,
+      "max_diagonal": 0.42956858164399664,
+      "mean_eigenvalue": 0.41727482173548386,
+      "min_diagonal": 0.3926873083616022,
+      "positive_definite_proxy": true,
+      "symmetry_error": 1.734723475976807e-18,
+      "trace": 2.5036489304129033
+    }
+  ],
+  "radius_max": 1.0,
+  "sampled_points": 50,
+  "seed": 6,
+  "total_points": 729
+}

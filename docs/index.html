@@ -100,6 +100,15 @@ footer a:hover { text-decoration:underline; }
 <label>Speed <input id="speed" type="range" min="0" max="30" step="1" value="8"><span id="speedVal">8</span></label>
 <label>Point size <input id="size" type="range" min="1" max="6" step="1" value="2"><span id="sizeVal">2</span></label>
 <label>Seed (camera) <input id="seed" type="range" min="1" max="99" step="1" value="17"><span id="seedVal">17</span></label>
+<label>Branch (quintic only)
+<select id="branch">
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+</select>
+</label>
 <label>Color by
 <select id="colorBy">
 <option value="radius">radius</option>
@@ -123,7 +132,7 @@ Source: <a href="https://github.com/amurlaniakea/calabi-yau-projection-lab">gith
 const $ = (id) => document.getElementById(id);
 const canvas = $('view');
 const ctx = canvas.getContext('2d');
-const controls = { objType:$('objType'), degree:$('degree'), resolution:$('resolution'), speed:$('speed'), size:$('size'), seed:$('seed'), colorBy:$('colorBy') };
+const controls = { objType:$('objType'), degree:$('degree'), resolution:$('resolution'), speed:$('speed'), size:$('size'), seed:$('seed'), branch:$('branch'), colorBy:$('colorBy') };
 const labels = { degree:$('degreeVal'), resolution:$('resolutionVal'), speed:$('speedVal'), size:$('sizeVal'), seed:$('seedVal') };
 let points = [];
 let currentBasis = [];
@@ -131,6 +140,7 @@ let alpha = 0;
 let beta = 0;
 let running = true;
 let legendRange = { min: 0, max: 1 };
+let lastQuinticStats = { maxResidual: 0, discarded: 0, attempted: 0 };
 
 function getSeed() { return Number(controls.seed.value); }
 
@@ -306,6 +316,7 @@ function generateDomain(dim, samples, seed) {
 
 function generateQuinticChart(grid, branch, radiusMax) {
   const pts = [];
+  const stats = { maxResidual: 0, discarded: 0, attempted: 0 };
   const radii = [];
   const angles = [];
   for (let i = 0; i < grid; i++) {
@@ -330,7 +341,13 @@ function generateQuinticChart(grid, branch, radiusMax) {
               const p3 = zpow5(z3.re, z3.im);
               const resRe = p0.re + p1.re + p2.re + p3.re + 1;
               const resIm = p0.im + p1.im + p2.im + p3.im;
-              if (Math.hypot(resRe, resIm) > 1e-9) continue;
+              const residual = Math.hypot(resRe, resIm);
+              stats.attempted += 1;
+              if (residual > stats.maxResidual) stats.maxResidual = residual;
+              if (residual > 1e-9) {
+                stats.discarded += 1;
+                continue;
+              }
               pts.push([z0.re, z0.im, z1.re, z1.im, z2.re, z2.im, z3.re, z3.im]);
             }
           }
@@ -338,6 +355,7 @@ function generateQuinticChart(grid, branch, radiusMax) {
       }
     }
   }
+  lastQuinticStats = stats;
   return pts;
 }
 
@@ -363,7 +381,7 @@ function objectNote(type, deg, res) {
     return 'Sampled unit 4-sphere S^3 in R^4. Each point has norm approximately 1.';
   }
   if (type === 'quintic-chart') {
-    return 'Quintic CY3 affine chart Z4=1. Local 6D object in R^8. Branch 0. Residual checked. Not global, no metric.';
+    return 'Quintic CY3 affine chart Z4=1. Local 6D object in R^8. Branch ' + controls.branch.value + '. Max residual ' + lastQuinticStats.maxResidual.toExponential(2) + '. Discarded ' + lastQuinticStats.discarded + '. Not global, no metric.';
   }
   return 'Uniform random domain in [-1,1]^11. Baseline high-dimensional sampling, not a manifold.';
 }
@@ -378,7 +396,7 @@ function generate() {
   else if (type === 'hypercube') points = generateHypercube(6, Math.min(4, Math.max(2, Math.round(res / 8) + 2)));
   else if (type === 'sphere') points = generateSphere(4, Math.min(4096, res * res), sd);
   else if (type === 'domain') points = generateDomain(11, Math.min(4096, res * res), sd);
-  else if (type === 'quintic-chart') points = generateQuinticChart(Math.min(res, 5), 0, 1.0);
+  else if (type === 'quintic-chart') points = generateQuinticChart(Math.min(res, 5), Number(controls.branch.value), 1.0);
   else points = [];
   currentBasis = makeBasis(getObjectDim(), sd);
   $('objectNote').textContent = objectNote(type, deg, res);
@@ -485,7 +503,7 @@ function updateInfo() {
     'seed (camera): ' + getSeed() + '\n' +
     'alpha: ' + alpha.toFixed(4) + '\n' +
     'beta: ' + beta.toFixed(4) + '\n' +
-    'color encodes: ' + controls.colorBy.value + '\n\n' +
+    'color encodes: ' + controls.colorBy.value + (type === 'quintic-chart' ? '\nbranch: ' + controls.branch.value + '\nmax residual: ' + lastQuinticStats.maxResidual.toExponential(2) + '\ndiscarded: ' + lastQuinticStats.discarded : '') + '\n\n' +
     'Exact topology (Python module):\n' +
     'quintic CP4: h11=1 h21=101 chi=-200\n' +
     'K3 quartic: h20=1 h11=20 chi=24\n' +
@@ -514,6 +532,7 @@ controls.objType.addEventListener('change', generate);
   controls[id].addEventListener('input', updateLabels);
 });
 controls.seed.addEventListener('input', generate);
+controls.branch.addEventListener('change', generate);
 controls.colorBy.addEventListener('change', updateInfo);
 $('regen').addEventListener('click', () => {
   let s = getSeed() + 1;

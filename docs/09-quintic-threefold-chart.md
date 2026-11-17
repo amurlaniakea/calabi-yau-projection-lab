@@ -106,3 +106,31 @@ The topology module provides exact Hodge numbers for the quintic:
 These are classification data. The chart provides a geometric
 realization of a local piece of the same variety. They are
 complementary, not redundant.
+
+## Web branch explorer
+
+The interactive demo includes a Branch selector for the quintic chart.
+
+Allowed branches:
+
+    0, 1, 2, 3, 4
+
+Each branch corresponds to a different choice of the complex fifth root:
+
+    z3 = (-1 - z0^5 - z1^5 - z2^5)^(1/5)
+
+The demo also reports:
+
+- maximum residual observed;
+- number of discarded points;
+- number of attempted points.
+
+This is useful pedagogically because it shows that a complex algebraic
+variety is not seen through a single global coordinate patch. Different
+branches expose different local sheets of the same mathematical object.
+
+The residual check remains:
+
+    |z0^5 + z1^5 + z2^5 + z3^5 + 1| < 1e-9
+
+Points failing this bound are discarded.

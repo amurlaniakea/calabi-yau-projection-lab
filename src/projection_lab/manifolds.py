@@ -172,3 +172,92 @@ def sample_clifford_torus(
 
     return points
 
+def _complex_nth_root(z_re, z_im, n, branch):
+    r = math.hypot(z_re, z_im)
+    if r == 0.0:
+        return (0.0, 0.0)
+    theta = math.atan2(z_im, z_re)
+    if theta < 0.0:
+        theta += 2.0 * math.pi
+    rn = r ** (1.0 / n)
+    theta_n = (theta + 2.0 * math.pi * branch) / n
+    return (rn * math.cos(theta_n), rn * math.sin(theta_n))
+
+
+def sample_quintic_threefold_chart(
+    grid: int = 4,
+    branch: int = 0,
+    radius_max: float = 1.0,
+) -> List[Vector]:
+    """Sample a local affine chart of the quintic Calabi-Yau threefold.
+
+    Equation in CP^4: Z0^5 + Z1^5 + Z2^5 + Z3^5 + Z4^5 = 0.
+    Affine chart Z4 = 1: z0^5 + z1^5 + z2^5 + z3^5 + 1 = 0.
+
+    Parametrize (z0, z1, z2) on a polar grid in the disk |z| <= radius_max,
+    solve z3 = (-1 - z0^5 - z1^5 - z2^5)^(1/5) using the given branch.
+
+    Returns points in R^8:
+        (Re z0, Im z0, Re z1, Im z1, Re z2, Im z2, Re z3, Im z3)
+
+    This is a LOCAL chart, not the global variety. It does not cover
+    points where Z4 = 0. Five branches give five local patches.
+    """
+    if grid < 2:
+        raise ValueError("grid must be >= 2")
+    if not (0 <= branch <= 4):
+        raise ValueError("branch must be in [0, 4]")
+    if radius_max <= 0.0 or not math.isfinite(radius_max):
+        raise ValueError("radius_max must be finite and > 0")
+
+    total = grid ** 6
+    if total > MAX_POINTS:
+        raise ValueError(
+            f"grid too large: {total} points > {MAX_POINTS}"
+        )
+
+    radii = [radius_max * (i + 0.5) / grid for i in range(grid)]
+    angles = [2.0 * math.pi * j / grid for j in range(grid)]
+
+    points: List[Vector] = []
+
+    for r0 in radii:
+        for a0 in angles:
+            z0_re = r0 * math.cos(a0)
+            z0_im = r0 * math.sin(a0)
+            for r1 in radii:
+                for a1 in angles:
+                    z1_re = r1 * math.cos(a1)
+                    z1_im = r1 * math.sin(a1)
+                    for r2 in radii:
+                        for a2 in angles:
+                            z2_re = r2 * math.cos(a2)
+                            z2_im = r2 * math.sin(a2)
+                            rhs_re = -1.0 - (z0_re**5 - 10*z0_re**3*z0_im**2 + 5*z0_re*z0_im**4)
+                            rhs_re -= (z1_re**5 - 10*z1_re**3*z1_im**2 + 5*z1_re*z1_im**4)
+                            rhs_re -= (z2_re**5 - 10*z2_re**3*z2_im**2 + 5*z2_re*z2_im**4)
+                            rhs_im = -(5*z0_re**4*z0_im - 10*z0_re**2*z0_im**3 + z0_im**5)
+                            rhs_im -= (5*z1_re**4*z1_im - 10*z1_re**2*z1_im**3 + z1_im**5)
+                            rhs_im -= (5*z2_re**4*z2_im - 10*z2_re**2*z2_im**3 + z2_im**5)
+                            z3_re, z3_im = _complex_nth_root(rhs_re, rhs_im, 5, branch)
+                            res_re = (z0_re**5 - 10*z0_re**3*z0_im**2 + 5*z0_re*z0_im**4)
+                            res_re += (z1_re**5 - 10*z1_re**3*z1_im**2 + 5*z1_re*z1_im**4)
+                            res_re += (z2_re**5 - 10*z2_re**3*z2_im**2 + 5*z2_re*z2_im**4)
+                            res_re += (z3_re**5 - 10*z3_re**3*z3_im**2 + 5*z3_re*z3_im**4)
+                            res_re += 1.0
+                            res_im = (5*z0_re**4*z0_im - 10*z0_re**2*z0_im**3 + z0_im**5)
+                            res_im += (5*z1_re**4*z1_im - 10*z1_re**2*z1_im**3 + z1_im**5)
+                            res_im += (5*z2_re**4*z2_im - 10*z2_re**2*z2_im**3 + z2_im**5)
+                            res_im += (5*z3_re**4*z3_im - 10*z3_re**2*z3_im**3 + z3_im**5)
+                            if math.hypot(res_re, res_im) > 1e-9:
+                                continue
+                            pt = [z0_re, z0_im, z1_re, z1_im,
+                                  z2_re, z2_im, z3_re, z3_im]
+                            if all(math.isfinite(x) for x in pt):
+                                points.append(pt)
+
+    if not points:
+        raise RuntimeError("Generated no finite points on the quintic chart")
+
+    return points
+

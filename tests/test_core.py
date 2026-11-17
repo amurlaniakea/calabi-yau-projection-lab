@@ -10,6 +10,7 @@ from projection_lab.manifolds import (
     sample_calabi_yau_like_patch,
     sample_clifford_torus,
     sample_hypercube,
+    sample_quintic_threefold_chart,
     sample_nd_sphere,
     sample_random_domain,
 )
@@ -198,6 +199,41 @@ class TestTopology(unittest.TestCase):
         self.assertTrue(r['is_calabi_yau'])
         self.assertEqual(r['real_dim'], 6)
         self.assertEqual(r['euler_characteristic'], -200)
+
+
+class TestQuinticChart(unittest.TestCase):
+    def test_dimension(self):
+        pts = sample_quintic_threefold_chart(grid=3, branch=0)
+        self.assertTrue(len(pts) > 0)
+        for pt in pts:
+            self.assertEqual(len(pt), 8)
+
+    def test_residual(self):
+        pts = sample_quintic_threefold_chart(grid=3, branch=0)
+        for pt in pts:
+            z0 = complex(pt[0], pt[1])
+            z1 = complex(pt[2], pt[3])
+            z2 = complex(pt[4], pt[5])
+            z3 = complex(pt[6], pt[7])
+            residual = z0**5 + z1**5 + z2**5 + z3**5 + 1.0
+            self.assertLess(abs(residual), 1e-9)
+
+    def test_branches_differ(self):
+        pts0 = sample_quintic_threefold_chart(grid=3, branch=0)
+        pts1 = sample_quintic_threefold_chart(grid=3, branch=1)
+        self.assertTrue(len(pts0) > 0)
+        self.assertTrue(len(pts1) > 0)
+        z3_0 = complex(pts0[0][6], pts0[0][7])
+        z3_1 = complex(pts1[0][6], pts1[0][7])
+        self.assertGreater(abs(z3_0 - z3_1), 1e-12)
+
+    def test_invalid_branch(self):
+        with self.assertRaises(ValueError):
+            sample_quintic_threefold_chart(grid=3, branch=5)
+
+    def test_invalid_grid(self):
+        with self.assertRaises(ValueError):
+            sample_quintic_threefold_chart(grid=1)
 
 
 if __name__ == "__main__":

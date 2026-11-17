@@ -12,6 +12,7 @@ from .manifolds import (
     sample_calabi_yau_like_patch,
     sample_clifford_torus,
     sample_flat_torus,
+    sample_quintic_threefold_chart,
     sample_hypercube,
     sample_nd_sphere,
     sample_random_domain,
@@ -214,6 +215,21 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     p.add_argument("--ambient", type=int, required=True)
     p.add_argument("--out", default=None, help="Optional JSON output path")
     p.set_defaults(func=lambda a: _topology_cmd(a))
+
+    p = subs.add_parser("quintic-chart", help="Local affine chart of the quintic CY3 in R^8")
+    _add_common(p)
+    p.add_argument("--grid", type=int, default=4)
+    p.add_argument("--branch", type=int, default=0)
+    p.add_argument("--radius-max", type=float, default=1.0)
+    p.set_defaults(
+        func=lambda a: _finish(
+            a,
+            sample_quintic_threefold_chart(a.grid, a.branch, a.radius_max),
+            8,
+            "quintic_threefold_chart",
+            {"grid": a.grid, "branch": a.branch, "radius_max": a.radius_max},
+        )
+    )
 
     args = parser.parse_args(argv)
     args.func(args)

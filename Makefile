@@ -15,3 +15,10 @@ examples:
 clean:
 	find . -type d -name '__pycache__' -exec rm -rf {} +
 	rm -f examples/*.svg examples/*.json
+
+quintic-gallery:
+	PYTHONPATH=src python3 -m projection_lab.cli quintic-chart --grid 4 --branch 0 --seed 6 --out examples/quintic_branch0.svg --meta examples/quintic_branch0.json
+	PYTHONPATH=src python3 -m projection_lab.cli quintic-chart --grid 4 --branch 1 --seed 6 --out examples/quintic_branch1.svg --meta examples/quintic_branch1.json
+	PYTHONPATH=src python3 -m projection_lab.cli quintic-chart --grid 4 --branch 2 --seed 6 --out examples/quintic_branch2.svg --meta examples/quintic_branch2.json
+	PYTHONPATH=src python3 -m projection_lab.cli quintic-chart --grid 4 --branch 3 --seed 6 --out examples/quintic_branch3.svg --meta examples/quintic_branch3.json
+	PYTHONPATH=src python3 -m projection_lab.cli quintic-chart --grid 4 --branch 4 --seed 6 --out examples/quintic_branch4.svg --meta examples/quintic_branch4.json

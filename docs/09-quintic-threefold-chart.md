@@ -134,3 +134,39 @@ The residual check remains:
     |z0^5 + z1^5 + z2^5 + z3^5 + 1| < 1e-9
 
 Points failing this bound are discarded.
+
+## Branch gallery (SVG/JSON)
+
+The Makefile target `quintic-gallery` generates five local affine-chart
+images for branches 0 to 4 using the same grid, seed and camera basis.
+
+Run:
+
+    make quintic-gallery
+
+Outputs:
+
+    examples/quintic_branch0.svg
+    examples/quintic_branch0.json
+    examples/quintic_branch1.svg
+    examples/quintic_branch1.json
+    examples/quintic_branch2.svg
+    examples/quintic_branch2.json
+    examples/quintic_branch3.svg
+    examples/quintic_branch3.json
+    examples/quintic_branch4.svg
+    examples/quintic_branch4.json
+
+This is useful in class because students can compare five local sheets
+of the same algebraic equation under the same projection camera. The
+differences are not caused by a different random camera; they are caused
+by the choice of complex fifth-root branch.
+
+Interpretation checklist:
+
+- Same seed: same projection basis.
+- Different branch: different z3 solution.
+- Same residual bound: all accepted points satisfy the equation.
+- Image differences illustrate local charts, not the global variety.
+- No metric or Ricci-flatness is being computed here.
+

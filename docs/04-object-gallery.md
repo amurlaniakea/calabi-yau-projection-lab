@@ -128,6 +128,24 @@ higher-dimensional compact objects.
 Limitations: it is not a Calabi-Yau threefold; it is a point cloud,
 not a mesh with normals or lighting.
 
+
+## 8. Quintic threefold affine chart
+
+Command:
+
+    PYTHONPATH=src python3 -m projection_lab.cli quintic-chart \
+      --grid 4 --branch 0 --seed 6 --out examples/quintic_chart.svg
+
+Mathematical idea: a local affine chart of the quintic CY3
+in CP^4, parametrized by (z0, z1, z2) in C^3 with z3 solved
+via the 5th root. Points live in R^8.
+
+Pedagogical value: real 6D object embedded in R^8; branch
+selection; residual check; connection to physics without
+claiming to simulate it.
+
+Limitations: local chart only, not global; no metric;
+no cohomology from scratch; projection loses 6 dimensions.
 ## How to read any object image
 
 For every generated SVG, ask:

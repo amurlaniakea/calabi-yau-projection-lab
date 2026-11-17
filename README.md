@@ -26,11 +26,12 @@ A professional, zero-dependency laboratory for projecting, slicing and visually 
   - Unit n-sphere sample.
   - Calabi–Yau-like Fermat patch in `R^4`.
   - Clifford torus in `R^4` (S^1 x S^1 embedded in S^3).
+  - Quintic threefold affine chart in `R^8` (local, 5 branches).
 - Slices with frozen coordinates.
 - Exact Fermat Hodge numbers and Euler characteristics via integer combinatorics.
 - Reproducible SVG output and SHA-256 hashes.
 - Local interactive HTML/Canvas demo, no CDN, no framework.
-- Tests as evidence (30 tests).
+- Tests as evidence (35 tests).
 
 ## Pedagogy and audience
 
@@ -43,6 +44,7 @@ This repository is intended as an open educational resource for university teach
 - [Degree and patches clarification](docs/06-degree-and-patches.md)
 - [Equations, Clifford torus and PSM note](docs/07-equations-and-psm.md)
 - [Classroom lab sheet](docs/08-classroom-lab-sheet.md)
+- [Quintic threefold chart](docs/09-quintic-threefold-chart.md)
 
 For instructors: use the CLI and local demo to show projections, slices, Clifford torus, Fermat patches and hidden-coordinate encoding.
 
@@ -57,13 +59,13 @@ For students: the key lesson is that a 2D image of a 6D/11D object is a shadow, 
     │   ├── linalg.py          # dot, norm, Gram-Schmidt
     │   ├── basis.py           # deterministic orthonormal bases
     │   ├── project.py         # R^n -> R^2 projection
-    │   ├── manifolds.py       # hypercube, torus, sphere, CY-like patch, Clifford torus
+    │   ├── manifolds.py       # hypercube, torus, sphere, CY-like patch, Clifford torus, quintic chart
     │   ├── slices.py          # fixed-coordinate slices
     │   ├── topology.py        # exact Fermat Hodge numbers and Euler characteristic
     │   ├── render_svg.py      # reproducible SVG renderer
     │   └── cli.py             # command line interface
     ├── tests/
-    │   └── test_core.py       # 30 tests as evidence
+    │   └── test_core.py       # 35 tests as evidence
     ├── docs/
     │   ├── index.html         # zero-dependency interactive demo
     │   ├── 00-sdd.md          # Software Design Document
@@ -75,6 +77,7 @@ For students: the key lesson is that a 2D image of a 6D/11D object is a shadow, 
     │   ├── 06-degree-and-patches.md
     │   ├── 07-equations-and-psm.md
     │   ├── 08-classroom-lab-sheet.md
+│   ├── 09-quintic-threefold-chart.md
     │   └── assets/            # SVG previews for README
     ├── examples/              # generated SVG + JSON metadata
     ├── Makefile
@@ -122,6 +125,8 @@ Open the interactive demo:
     PYTHONPATH=src python3 -m projection_lab.cli slice --dim 6 --steps 6 --fixed 3=0.25,4=0.75 --seed 4 --out examples/slice6d.svg
 
     PYTHONPATH=src python3 -m projection_lab.cli topology --degree 5 --ambient 4 --out examples/topology_quintic.json
+
+PYTHONPATH=src python3 -m projection_lab.cli quintic-chart --grid 4 --branch 0 --seed 6 --out examples/quintic_chart_g4_b0.svg
 
 ## Reproducibility contract
 

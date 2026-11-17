@@ -1,6 +1,7 @@
 # Calabi–Yau Projection Lab
 
 ![CI](https://github.com/amurlaniakea/calabi-yau-projection-lab/actions/workflows/ci.yml/badge.svg)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24297864.svg)](https://doi.org/10.5281/zenodo.24297864)
 
 **Live Demo:** [amurlaniakea.github.io/calabi-yau-projection-lab](https://amurlaniakea.github.io/calabi-yau-projection-lab/)
 
@@ -198,7 +199,14 @@ In short:
 
 ## Citation
 
-Please cite this repository using the metadata in `CITATION.cff`. After the first Zenodo deposit, a DOI badge will be added here.
+Please cite this repository using the metadata in `CITATION.cff`.
+
+DOI: [10.5281/zenodo.24297864](https://doi.org/10.5281/zenodo.24297864)
+
+Suggested citation:
+
+> Sordo Martínez, Pedro. (2026). Calabi–Yau Projection Lab [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.24297864
+
 
 ## License
 

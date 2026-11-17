@@ -153,6 +153,43 @@ Questions:
 - uses exact topology values correctly: 20 percent
 - respects explicit limitations (no physics claims): 20 percent
 
+## Part 7 — Quintic branch explorer (15 min)
+
+Open the demo and select Quintic CY3 chart (R^8).
+
+The affine chart is:
+
+    z0^5 + z1^5 + z2^5 + z3^5 + 1 = 0
+
+with:
+
+    z3 = (-1 - z0^5 - z1^5 - z2^5)^(1/5)
+
+There are five branches, labeled 0 to 4.
+
+Tasks:
+
+1. Set Branch = 0. Record max residual and discarded points from Render data.
+2. Change Branch = 1. Observe how the projected cloud changes.
+3. Repeat for Branch = 2, 3, 4.
+4. Keep Seed fixed while changing Branch. What changes? What stays the same?
+5. Switch Color by = coordinate 2 or last coordinate. Which hidden structure becomes visible?
+
+Questions:
+
+- Why do different branches give different z3 values?
+- Why is a single branch not the whole quintic threefold?
+- What does the residual check prove about the sampled points?
+- If discarded points are zero or very small, what does that say about numerical consistency?
+- How does this connect to exact topology values h11=1, h21=101, chi=-200?
+
+Important interpretation:
+
+- Branch changes the local sheet of the algebraic equation.
+- Seed changes the projection camera.
+- The mathematical object is not the 2D image.
+- No metric or Ricci-flatness is being computed here.
+
 ## Resumen en espanol
 
 Ficha de 60 a 90 minutos para aulas de algebra lineal, geometria,
@@ -165,3 +202,4 @@ topologia exacta por CLI; slices como tomografia.
 Evaluacion: explicar perdidas de informacion, comparar semillas,
 calcular chi de la quintica, verificar Clifford en S^3
 y enunciar limites del repo.
+Nota en espanol: la Parte 7 pide comparar las cinco ramas locales del chart afine de la quintica, registrar el residuo maximo y distinguir entre cambio de rama (hoja local) y cambio de seed (camara de proyeccion).

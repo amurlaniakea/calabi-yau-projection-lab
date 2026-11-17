@@ -11,7 +11,7 @@
 
 ![Calabi-Yau Projection Lab preview 2](docs/assets/readme_projection_2.png)
 
-*Visual previews of the projection lab.*
+*Screenshots from the software.*
 
 «Tecnósfera al servicio de la Biósfera.»
 «La Paz Es El Camino.»

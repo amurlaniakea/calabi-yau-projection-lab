@@ -36,6 +36,7 @@ A professional, zero-dependency laboratory for projecting, slicing and visually 
 - Exact Fermat Hodge numbers and Euler characteristics via integer combinatorics.
 - Reproducible quintic branch gallery: five local sheets under the same camera.
 - Fubini-Study induced metric diagnostics on the quintic chart (approximation, not Ricci-flat).
+- Metadata JSON sidecars describing reproducible outputs; point-level datasets are not yet exported by default.
 - Reproducible SVG output and SHA-256 hashes.
 - Local interactive HTML/Canvas demo, no CDN, no framework.
 - Tests as evidence (45 tests).
@@ -54,6 +55,7 @@ This repository is intended as an open educational resource for university teach
 - [Quintic threefold chart](docs/09-quintic-threefold-chart.md)
 - [Quintic branch gallery](docs/quintic-branch-gallery.html)
 - [Metric diagnostics](docs/10-metric-diagnostics.md)
+- [Metadata and data contract](docs/11-metadata-and-data-contract.md)
 
 For instructors: use the CLI and local demo to show projections, slices, Clifford torus, Fermat patches and hidden-coordinate encoding.
 
@@ -91,6 +93,7 @@ calabi-yau-projection-lab/
 │   ├── 08-classroom-lab-sheet.md
 │   ├── 09-quintic-threefold-chart.md
 │   ├── 10-metric-diagnostics.md
+│   ├── 11-metadata-and-data-contract.md
 │   ├── quintic-branch-gallery.html # static five-branch gallery
 │   └── assets/            # SVG previews for README, quintic branch gallery and static pages
 ├── examples/              # generated SVG + JSON metadata
@@ -196,6 +199,7 @@ In short:
 - No external runtime dependencies are used.
 - PSM / Donaldson / ML metric layers are documented as future sibling-repo work, not implemented here.
 - Metric diagnostics are Fubini-Study induced approximations on tangent spaces, not Ricci-flat Calabi-Yau metrics.
+- JSON files beside SVG outputs are reproducibility metadata manifests, not full point-cloud datasets.
 
 ## Citation
 
@@ -230,7 +234,7 @@ Incluye:
 
 - núcleo matemático en Python sin dependencias externas;
 - render SVG reproducible con SHA-256;
-- 35 tests como evidencia;
+- 45 tests como evidencia;
 - demo local HTML/Canvas sin CDN con selector de objeto, seed de cámara, leyenda de color y ecuaciones MathML nativas;
 - documentación pedagógica, galería de objetos, roadmap físico, ficha de laboratorio universitaria;
 - licencia AGPL-3.0-or-later.

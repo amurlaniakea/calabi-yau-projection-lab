@@ -170,3 +170,21 @@ Interpretation checklist:
 - Image differences illustrate local charts, not the global variety.
 - No metric or Ricci-flatness is being computed here.
 
+## Web branch gallery (static)
+
+The Makefile target `quintic-gallery-previews` generates lightweight
+SVG previews for branches 0 to 4 under:
+
+    docs/assets/quintic_branches/
+
+A static gallery page is available at:
+
+    docs/quintic-branch-gallery.html
+
+It shows the five local sheets using the same seed and camera, with
+short metadata and links to the full-resolution SVG/JSON files under
+`examples/`.
+
+This is useful for classroom projection and for comparing branch
+structure without opening the interactive demo.
+

@@ -1,0 +1,13 @@
+{
+  "basis_seed": 6,
+  "branch": 2,
+  "color_by": "auto",
+  "dim": 8,
+  "grid": 3,
+  "object": "quintic_threefold_chart",
+  "output": "docs/assets/quintic_branches/branch2.svg",
+  "points": 729,
+  "radius_max": 1.0,
+  "seed": 6,
+  "svg_sha256": "6ef86b7387cfa929ac40860884c302af4495dc9a073f9f6b4672e24b2da92473"
+}

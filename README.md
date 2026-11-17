@@ -29,6 +29,7 @@ A professional, zero-dependency laboratory for projecting, slicing and visually 
   - Quintic threefold affine chart in `R^8` (local, 5 branches).
 - Slices with frozen coordinates.
 - Exact Fermat Hodge numbers and Euler characteristics via integer combinatorics.
+- Reproducible quintic branch gallery: five local sheets under the same camera.
 - Reproducible SVG output and SHA-256 hashes.
 - Local interactive HTML/Canvas demo, no CDN, no framework.
 - Tests as evidence (35 tests).
@@ -45,6 +46,7 @@ This repository is intended as an open educational resource for university teach
 - [Equations, Clifford torus and PSM note](docs/07-equations-and-psm.md)
 - [Classroom lab sheet](docs/08-classroom-lab-sheet.md)
 - [Quintic threefold chart](docs/09-quintic-threefold-chart.md)
+- [Quintic branch gallery](docs/quintic-branch-gallery.html)
 
 For instructors: use the CLI and local demo to show projections, slices, Clifford torus, Fermat patches and hidden-coordinate encoding.
 
@@ -79,7 +81,8 @@ calabi-yau-projection-lab/
 │   ├── 07-equations-and-psm.md
 │   ├── 08-classroom-lab-sheet.md
 │   ├── 09-quintic-threefold-chart.md
-│   └── assets/            # SVG previews for README
+│   ├── quintic-branch-gallery.html # static five-branch gallery
+│   └── assets/            # SVG previews for README and quintic branch gallery
 ├── examples/              # generated SVG + JSON metadata
 ├── Makefile
 ├── LICENSE                # AGPL-3.0-or-later
@@ -101,6 +104,11 @@ Run tests and generate examples:
 
     make test
     make examples
+
+Optional reproducible galleries:
+
+    make quintic-gallery
+    make quintic-gallery-previews
 
 If you do not have `make`:
 

@@ -22,3 +22,11 @@ quintic-gallery:
 	PYTHONPATH=src python3 -m projection_lab.cli quintic-chart --grid 4 --branch 2 --seed 6 --out examples/quintic_branch2.svg --meta examples/quintic_branch2.json
 	PYTHONPATH=src python3 -m projection_lab.cli quintic-chart --grid 4 --branch 3 --seed 6 --out examples/quintic_branch3.svg --meta examples/quintic_branch3.json
 	PYTHONPATH=src python3 -m projection_lab.cli quintic-chart --grid 4 --branch 4 --seed 6 --out examples/quintic_branch4.svg --meta examples/quintic_branch4.json
+
+quintic-gallery-previews:
+	mkdir -p docs/assets/quintic_branches
+	PYTHONPATH=src python3 -m projection_lab.cli quintic-chart --grid 3 --branch 0 --seed 6 --out docs/assets/quintic_branches/branch0.svg --meta docs/assets/quintic_branches/branch0.json
+	PYTHONPATH=src python3 -m projection_lab.cli quintic-chart --grid 3 --branch 1 --seed 6 --out docs/assets/quintic_branches/branch1.svg --meta docs/assets/quintic_branches/branch1.json
+	PYTHONPATH=src python3 -m projection_lab.cli quintic-chart --grid 3 --branch 2 --seed 6 --out docs/assets/quintic_branches/branch2.svg --meta docs/assets/quintic_branches/branch2.json
+	PYTHONPATH=src python3 -m projection_lab.cli quintic-chart --grid 3 --branch 3 --seed 6 --out docs/assets/quintic_branches/branch3.svg --meta docs/assets/quintic_branches/branch3.json
+	PYTHONPATH=src python3 -m projection_lab.cli quintic-chart --grid 3 --branch 4 --seed 6 --out docs/assets/quintic_branches/branch4.svg --meta docs/assets/quintic_branches/branch4.json
